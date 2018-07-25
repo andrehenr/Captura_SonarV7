@@ -63,29 +63,20 @@ public class StepBusiness {
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	} 
 	public void clicarEmVulnerability(){
 		viewElement.click(page.getVulnerability());
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	
 	public void clicarEmSeverity(){
 		viewElement.click(page.getSeverity());
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	public void clicarGestor(String gestor) {
