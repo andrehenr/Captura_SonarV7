@@ -6,10 +6,7 @@ Scenario Outline: Para capturar uma sigla no Sonar
   When preencho login
   And preencho senha
   And pressiono botao entrar 
-  And capturo os paineis listados na massa
-  And entro na Issues
-  And entro em vulnerability
-  And entro em severity
+  And inicio a captura dos paineis listados na massa
  
  
  Examples:

@@ -39,44 +39,69 @@ public class PageObjectClass extends PageObject {
 	@FindBy(xpath = "//*[@id='overview-quality-gate']")
 	private WebElement divQualityGate;
 
-	@FindBy(xpath="(//*[@class='nav navbar-nav nav-tabs']/li/a)[2]")
+	@FindBy(xpath = "(//*[@class='nav navbar-nav nav-tabs']/li/a)[2]")
 	private WebElement issues;
-	
-	@FindBy(xpath="//*[@id='content']/div/div[1]/div[2]/div/div[3]/div/a[2]")
+
+	@FindBy(xpath = "//*[@data-value='VULNERABILITY']")
 	private WebElement vulnerability;
-	
-	@FindBy(xpath="//*[@id='content']/div/div[1]/div[2]/div/div[5]/a")
+
+	@FindBy(xpath = "//*[@data-property='severities']")
 	private WebElement severity;
-	
-	@FindBy(xpath="//*[@id='content']/div/div[1]/div[2]/div/div[5]/div")
+
+	@FindBy(xpath = "//*[@id='content']/div/div[1]/div[2]/div/div[5]/div")
 	private WebElement listaSeverity;
+
+	@FindBy(xpath = "//*[@data-value='BLOCKER']/span[2]")
+	private WebElement quantidadeBlockers;
+
+	@FindBy(xpath = "//*[@data-value='CRITICAL']/span[2]")
+	private WebElement quantidadeCriticals;
 	
-	public WebElement getListaSeverity(){
-		return severityBlocker;
-	}
+	@FindBy(xpath = "//*[@data-value='INFO']/span[2]")
+	private WebElement quantidadeInfos;
 	
-	public WebElement getListaSeverity(){
-		return severityCritical;
-	}
-	public WebElement getListaSeverity(){
-		return SeverityBlocker;
-	}
-	public WebElement getListaSeverity(){
-		return SeverityBlocker;
-	}
+	@FindBy(xpath = "//*[@data-value='MINOR']/span[2]")
+	private WebElement quantidadeMinors;
 	
-	
-	public WebElement getSeverity(){
+	@FindBy(xpath = "//*[@data-value='MAJOR']/span[2]")
+	private WebElement quantidadeMajors;
+
+	public WebElement getListaSeverity() {
+		return listaSeverity;
+	}
+
+	public WebElement getQuantidadeBlockers() {
+		return quantidadeBlockers;
+	}
+
+	public WebElement getQuantidadeCriticals() {
+		return quantidadeCriticals;
+	}
+
+	public WebElement getQuantidadeInfos() {
+		return quantidadeInfos;
+	}
+
+	public WebElement getQuantidadeMinors() {
+		return quantidadeMinors;
+	}
+
+	public WebElement getQuantidadeMajors() {
+		return quantidadeMajors;
+	}
+
+	public WebElement getSeverity() {
 		return severity;
 	}
-	
-	public WebElement getVulnerability(){
+
+	public WebElement getVulnerability() {
 		return vulnerability;
 	}
-	public WebElement getIssues(){
+
+	public WebElement getIssues() {
 		return issues;
 	}
-	
+
 	public WebElement getDivQualityGate() {
 		return divQualityGate;
 	}

@@ -18,6 +18,7 @@ import br.com.rsi.capturaSonarEspanha.pages.PageObjectClass;
 import br.com.rsi.capturaSonarEspanha.util.LerArquivoCSV;
 import br.com.rsi.capturaSonarEspanha.util.MassaCaptura;
 import io.openbdt.element.WebBrowserScreenElement;
+import jline.internal.Log;
 import jxl.common.Logger;
 import net.serenity_bdd.core.annotations.findby.By;
 
@@ -30,6 +31,9 @@ public class StepBusiness {
 	@Autowired
 	private WebBrowserScreenElement viewElement; // OBJETO QUE CONTeM MeTODOS
 													// PRoPRIOS DO FRAMEWORK
+
+	private Sigla sigla; // Objeto utilizado para a persistencia de cada painel
+							// da massa de captura
 
 	public void open(String url) {
 		viewElement.open(url);
@@ -52,33 +56,33 @@ public class StepBusiness {
 		viewElement.waitForElementIsPresent(2000, page.getLabelDashBoards());
 		viewElement.click(page.getLabelDashBoards());
 	}
-	
-	public String capturarQualityGate(){
+
+	public void capturarQualityGate() {
 		viewElement.waitForElementIsPresent(1000, page.getDivQualityGate());
-		return viewElement.getText(page.getDivQualityGate()).replaceAll("Quality Gate", "").trim().toUpperCase();
+		sigla.setQualidade(
+				viewElement.getText(page.getDivQualityGate()).replaceAll("Quality Gate", "").trim().toUpperCase());
 	}
-	
-	public void clicarEmIssues(){
+
+	public void clicarEmIssues() {
 		viewElement.click(page.getIssues());
+
+	}
+
+	public void clicarEmVulnerability() {
+		viewElement.click(page.getVulnerability());
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	} 
-	public void clicarEmVulnerability(){
-		viewElement.click(page.getVulnerability());
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public void clicarEmSeverity(){
+
+	public void clicarEmSeverity() {
+		viewElement.waitForElementIsPresent(10000, page.getSeverity());
 		viewElement.click(page.getSeverity());
 	}
-	
+
 	public void clicarGestor(String gestor) {
 		// Clico em DashBoards para aparecer os gestores cnfigurados
 		clicarEmDashBoards();
@@ -102,7 +106,8 @@ public class StepBusiness {
 		while (i < massaCapturaCompleta.size()) {
 			try {
 				clicarGestor(massaCapturaCompleta.get(i).getGestor());
-				selecionaPainel(massaCapturaCompleta.get(i).getPainel());
+				Sigla sigla = selecionaPainel(massaCapturaCompleta.get(i).getPainel());
+				System.out.println(sigla.toString());
 				i++;
 			} catch (Exception e) {
 				// Se ocorrer algum erro na captura de um painel eu passo para a
@@ -167,57 +172,67 @@ public class StepBusiness {
 
 	}
 
-	private Sigla capturaElementosNoPainel(int posicaoPainelDentrodoGestor){
+	private Sigla capturaElementosNoPainel(int posicaoPainelDentrodoGestor) {
 		Sigla sigla = null;
-		
-		try{
+
+		try {
 			sigla = new Sigla();
-			//Capturo em uma lista todas as linhas a partir de Lines of Code
-			ArrayList<WebElement> listaDeLinhasDoCorpoPainel = (ArrayList) page.getListaCorpoDosPaineis().get(posicaoPainelDentrodoGestor).findElements(By.tagName("tr"));
-			
+			// Capturo em uma lista todas as linhas a partir de Lines of Code
+			ArrayList<WebElement> listaDeLinhasDoCorpoPainel = (ArrayList) page.getListaCorpoDosPaineis()
+					.get(posicaoPainelDentrodoGestor).findElements(By.tagName("tr"));
+
 			int quantidadeRodadasSonar = listaDeLinhasDoCorpoPainel.get(0).findElements(By.tagName("td")).size();
-			
-			for(WebElement linhas : listaDeLinhasDoCorpoPainel){
-				
+
+			for (WebElement linhas : listaDeLinhasDoCorpoPainel) {
+
 				String linhaAnalisada = linhas.getText().toString();
-				String textoDaUltimaColuna = linhas.findElements(By.tagName("td")).get(quantidadeRodadasSonar-1).getText().toString();
-				if(!textoDaUltimaColuna.isEmpty()){
-					if(linhaAnalisada.contains("Lines of Code")){
+				String textoDaUltimaColuna = linhas.findElements(By.tagName("td")).get(quantidadeRodadasSonar - 1)
+						.getText().toString();
+				if (!textoDaUltimaColuna.isEmpty()) {
+					if (linhaAnalisada.contains("Lines of Code")) {
 						sigla.setLinhaCodigo(Integer.parseInt(textoDaUltimaColuna));
 					}
-					if(linhaAnalisada.contains("Bugs")){
+					if (linhaAnalisada.contains("Bugs")) {
 						sigla.setBugs(Integer.parseInt(textoDaUltimaColuna));
 					}
-					if(linhaAnalisada.contains("Code Smells")){
+					if (linhaAnalisada.contains("Code Smells")) {
 						sigla.setCodeSmall(Integer.parseInt(textoDaUltimaColuna));
 					}
-					if(linhaAnalisada.contains("Vulnerabilities")){
+					if (linhaAnalisada.contains("Vulnerabilities")) {
 						sigla.setVulnerabilidades(Integer.parseInt(textoDaUltimaColuna));
 					}
-					if(linhaAnalisada.contains("Coverage")){
+					if (linhaAnalisada.contains("Coverage")) {
 						sigla.setCobertura(textoDaUltimaColuna);
 					}
-					if(linhaAnalisada.contains("Technical Debt")){
+					if (linhaAnalisada.contains("Technical Debt")) {
 						sigla.setDebitoTecnico(textoDaUltimaColuna);
 					}
-					if(linhaAnalisada.contains("Reliability Remediation Effort")){
+					if (linhaAnalisada.contains("Reliability Remediation Effort")) {
 						sigla.setEsforcoConfiabilidade(textoDaUltimaColuna);
 					}
-					if(linhaAnalisada.contains("Security Remediation Effort")){
+					if (linhaAnalisada.contains("Security Remediation Effort")) {
 						sigla.setEsforcoSeguranca(textoDaUltimaColuna);
 					}
-					
+
 				}
 			}
-			
-		}
-		catch(Exception e){
+
+		} catch (Exception e) {
 			LOG.error("Erro ao capturar elementos no painel");
 		}
-		
+
 		return sigla;
 	}
 
+	/*
+	 * Metodo utilizado para coletar os dados no painel (Table History)
+	 * 
+	 * Retorna um objeto do tipo Sigla com a Data do Sonar, Sigla, URL do
+	 * Painel, versão da rodada do sonar, Linhas de Codigo, Bugs, Code Smell,
+	 * Vulnerabilidades, Cobertura, Debito Tecnico, Esforço de Confiabilidade,
+	 * Esforço de Segurança e Quality Gate
+	 * 
+	 */
 	private Sigla selecionaPainel(String painel) {
 		List<WebElement> linksPaineis = page.getListaLinksPaineis();
 		int i = 0;
@@ -251,7 +266,7 @@ public class StepBusiness {
 
 				// Capturo o resto do elementos que estao no painel
 				Sigla novaSigla = capturaElementosNoPainel(i);
-				
+
 				siglaCapturada.setLinhaCodigo(novaSigla.getLinhaCodigo());
 				LOG.debug(">> Linhas de Codigo Capturada");
 				siglaCapturada.setBugs(novaSigla.getBugs());
@@ -268,13 +283,6 @@ public class StepBusiness {
 				LOG.debug(">> Esforco de Confiabilidade Capturado");
 				siglaCapturada.setEsforcoSeguranca(novaSigla.getEsforcoSeguranca());
 				LOG.debug(">> Esforco de Seguranca Capturado");
-				
-				navegarParaDentroDoPainel(siglaCapturada.getUrl());
-				
-				siglaCapturada.setQualidade(capturarQualityGate());
-
-				System.out.println(siglaCapturada.toString());
-
 				break;
 			}
 			i++;
@@ -284,9 +292,9 @@ public class StepBusiness {
 		}
 		return siglaCapturada;
 	}
-	
-	public void navegarParaDentroDoPainel(String urlPainel){
-		viewElement.navigate(urlPainel);
+
+	public void navegarParaDentroDoPainel() {
+		viewElement.navigate(sigla.getUrl());
 		LOG.debug(">> Acessando o Painel");
 	}
 
@@ -304,6 +312,72 @@ public class StepBusiness {
 			}
 		}
 		return dataFinal;
+	}
+
+	public void iniciarCapturaDosPaineis() {
+		// Leio a massa de captura
+		ArrayList<MassaCaptura> massaCapturaCompleta = (ArrayList) LerArquivoCSV.getInformacoesArquivo();
+		// Inicio a captura de linha a linha da massa
+		int i = 0;
+		while (i < massaCapturaCompleta.size()) {
+			try {
+				sigla = new Sigla();
+				clicarGestor(massaCapturaCompleta.get(i).getGestor());
+				sigla = selecionaPainel(massaCapturaCompleta.get(i).getPainel());
+				// Entro na pagina do painel
+				navegarParaDentroDoPainel();
+				// Capturo o Quality Gate
+				capturarQualityGate();
+				// Clico na opcao Issues para poder capturar as Issues e
+				// Vulnerabilidades do Painel
+				clicarEmIssues();
+				// Clico em Severity para coletar as Issues de acordo com a
+				// Severity
+				clicarEmSeverity();
+				// Capturo as Issues
+				capturarIssues();
+				// Clico em Vulnerability para poder capturar as
+				// vulnerabilidades.
+				clicarEmVulnerability();
+				// Capturo as vulnerabilidades de acordo com a severidade
+				capturarVulnerabilidades();
+				System.out.println("Sigla: " + sigla.toString());
+				salvarSiglaBancoDeDados();
+				i++;
+			} catch (Exception e) {
+				// Se ocorrer algum erro na captura de um painel eu passo para a
+				// proxima linha
+				i++;
+			}
+		}
+	}
+
+	private void salvarSiglaBancoDeDados() {
+
+	}
+
+	private void capturarVulnerabilidades() {
+		LOG.debug(">> Capturando Vulnerabilidades");
+		sigla.setVulnerabilityAlta(Integer.parseInt(viewElement.getText(page.getQuantidadeCriticals()).trim()));
+		sigla.setVulnerabilityBaixa(Integer.parseInt(viewElement.getText(page.getQuantidadeMinors()).trim()));
+		sigla.setVulnerabilityMedia(Integer.parseInt(viewElement.getText(page.getQuantidadeMajors()).trim()));
+		sigla.setVulnerabilityMuitoAlta(Integer.parseInt(viewElement.getText(page.getQuantidadeBlockers()).trim()));
+		sigla.setVulnerabilityMuitoBaixa(Integer.parseInt(viewElement.getText(page.getQuantidadeInfos()).trim()));
+	}
+
+	private void capturarIssues() {
+		LOG.debug(">> Capturando Issues");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sigla.setIssuesAlta(Integer.parseInt(viewElement.getText(page.getQuantidadeCriticals()).trim()));
+		sigla.setIssuesBaixa(Integer.parseInt(viewElement.getText(page.getQuantidadeMinors()).trim()));
+		sigla.setIssuesMedia(Integer.parseInt(viewElement.getText(page.getQuantidadeMajors()).trim()));
+		sigla.setIssuesMuitoAlta(Integer.parseInt(viewElement.getText(page.getQuantidadeBlockers()).trim()));
+		sigla.setIssuesMuitoBaixa(Integer.parseInt(viewElement.getText(page.getQuantidadeInfos()).trim()));
 	}
 
 }

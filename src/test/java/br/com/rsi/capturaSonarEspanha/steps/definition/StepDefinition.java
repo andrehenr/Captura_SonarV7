@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.springframework.test.context.ContextConfiguration;
 
+import br.com.rsi.capturaSonarEspanha.domain.Sigla;
 import br.com.rsi.capturaSonarEspanha.steps.business.StepBusiness;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
@@ -58,27 +59,10 @@ public class StepDefinition {
 	public void pressiono_botao_entrar() {
 		stepBusiness.clicarEmLogIn();
 	}
-
-	@When("^capturo os paineis listados na massa$")
-	public void capturo_os_paineis_listados_na_massa() {
-		stepBusiness.capturaDosPaineis();
+	
+	@When("^inicio a captura dos paineis listados na massa")
+	public void inicio_a_captura_dos_paineis_listados_na_massa(){
+		stepBusiness.iniciarCapturaDosPaineis();
 	}
 	
-	@When("^entro na Issues")
-	public void pressiono_botao_issues(){
-		stepBusiness.clicarEmIssues();
-	}
-	
-	@When("^entro em vulnerability")
-	public void pressiono_botao_vulnerability(){
-		stepBusiness.clicarEmVulnerability();
-	}
-	
-	@When("^entro em severity")
-	public void pressiono_botao_severity(){
-		stepBusiness.clicarEmSeverity();
-	}
-		
-	
-
 }
