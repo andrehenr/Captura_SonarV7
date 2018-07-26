@@ -42,7 +42,7 @@ public class PageObjectClass extends PageObject {
 	@FindBy(xpath = "(//*[@class='nav navbar-nav nav-tabs']/li/a)[2]")
 	private WebElement issues;
 
-	@FindBy(xpath = "//*[@data-value='VULNERABILITY']")
+	@FindBy(xpath = "(//a[contains(@href,'VULNERABILITY')])[1]")
 	private WebElement vulnerability;
 
 	@FindBy(xpath = "//*[@data-property='severities']")

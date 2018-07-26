@@ -328,6 +328,13 @@ public class StepBusiness {
 				navegarParaDentroDoPainel();
 				// Capturo o Quality Gate
 				capturarQualityGate();
+				//***
+				// Clico em Vulnerability para poder capturar as
+				// vulnerabilidades.
+				clicarEmVulnerability();
+				clicarEmSeverity();
+				// Capturo as vulnerabilidades de acordo com a severidade
+				capturarVulnerabilidades();
 				// Clico na opcao Issues para poder capturar as Issues e
 				// Vulnerabilidades do Painel
 				clicarEmIssues();
@@ -336,17 +343,14 @@ public class StepBusiness {
 				clicarEmSeverity();
 				// Capturo as Issues
 				capturarIssues();
-				// Clico em Vulnerability para poder capturar as
-				// vulnerabilidades.
-				clicarEmVulnerability();
-				// Capturo as vulnerabilidades de acordo com a severidade
-				capturarVulnerabilidades();
 				System.out.println("Sigla: " + sigla.toString());
 				salvarSiglaBancoDeDados();
 				i++;
+				
 			} catch (Exception e) {
 				// Se ocorrer algum erro na captura de um painel eu passo para a
 				// proxima linha
+				System.out.println("Erro ao capturar: "+massaCapturaCompleta.get(i).getPainel());
 				i++;
 			}
 		}
