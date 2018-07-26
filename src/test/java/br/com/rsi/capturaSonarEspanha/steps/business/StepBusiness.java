@@ -1,11 +1,16 @@
 package br.com.rsi.capturaSonarEspanha.steps.business;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +18,7 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import br.com.rsi.capturaSonarEspanha.dao.SiglaDAO;
 import br.com.rsi.capturaSonarEspanha.domain.Sigla;
 import br.com.rsi.capturaSonarEspanha.pages.PageObjectClass;
 import br.com.rsi.capturaSonarEspanha.util.LerArquivoCSV;
@@ -38,6 +44,27 @@ public class StepBusiness {
 	public void open(String url) {
 		viewElement.open(url);
 		viewElement.getDriver().manage().window().maximize();
+	}
+	
+	public static Properties getProperties() {
+
+		Properties dadosDB = new Properties();
+
+		try {
+			FileInputStream arquivoDadosProperties = null;
+			try {
+				arquivoDadosProperties = new FileInputStream("./properties/dados.properties");
+			} catch (FileNotFoundException e) {
+				System.out.println("Erro com o arquivo dados.properties : " + e.getMessage());
+			}
+			// Instancio um Properties
+			dadosDB.load(arquivoDadosProperties);
+		} catch (IOException e) {
+			System.out.println("Erro com ao carregar o arquivo dados.properties : " + e.getMessage());
+		}
+
+		return dadosDB;
+
 	}
 
 	public void preencherLogin(String login) {
@@ -183,45 +210,74 @@ public class StepBusiness {
 
 			int quantidadeRodadasSonar = listaDeLinhasDoCorpoPainel.get(0).findElements(By.tagName("td")).size();
 
+			LOG.debug(quantidadeRodadasSonar);
+
 			for (WebElement linhas : listaDeLinhasDoCorpoPainel) {
 
 				String linhaAnalisada = linhas.getText().toString();
+				LOG.debug(linhaAnalisada);
 				String textoDaUltimaColuna = linhas.findElements(By.tagName("td")).get(quantidadeRodadasSonar - 1)
 						.getText().toString();
-				if (!textoDaUltimaColuna.isEmpty()) {
-					if (linhaAnalisada.contains("Lines of Code")) {
-						sigla.setLinhaCodigo(Integer.parseInt(textoDaUltimaColuna));
-					}
-					if (linhaAnalisada.contains("Bugs")) {
-						sigla.setBugs(Integer.parseInt(textoDaUltimaColuna));
-					}
-					if (linhaAnalisada.contains("Code Smells")) {
-						sigla.setCodeSmall(Integer.parseInt(textoDaUltimaColuna));
-					}
-					if (linhaAnalisada.contains("Vulnerabilities")) {
-						sigla.setVulnerabilidades(Integer.parseInt(textoDaUltimaColuna));
-					}
-					if (linhaAnalisada.contains("Coverage")) {
-						sigla.setCobertura(textoDaUltimaColuna);
-					}
-					if (linhaAnalisada.contains("Technical Debt")) {
-						sigla.setDebitoTecnico(textoDaUltimaColuna);
-					}
-					if (linhaAnalisada.contains("Reliability Remediation Effort")) {
-						sigla.setEsforcoConfiabilidade(textoDaUltimaColuna);
-					}
-					if (linhaAnalisada.contains("Security Remediation Effort")) {
-						sigla.setEsforcoSeguranca(textoDaUltimaColuna);
-					}
-
+				LOG.debug(textoDaUltimaColuna);
+				String textoCapturado = new String();
+				if (textoDaUltimaColuna == null || textoDaUltimaColuna.equals("")) {
+					textoCapturado = "0";
+				}
+				else{
+					textoCapturado = textoDaUltimaColuna;
+				}
+					
+				if (linhaAnalisada.contains("Lines of Code")) {
+					sigla.setLinhaCodigo(Integer.parseInt(validaStringComPonto(textoCapturado)));
+				}
+				if (linhaAnalisada.contains("Bugs")) {
+					sigla.setBugs(Integer.parseInt(validaStringComPonto(textoCapturado)));
+				}
+				if (linhaAnalisada.contains("Code Smells")) {
+					sigla.setCodeSmall(Integer.parseInt(validaStringComPonto(textoCapturado)));
+				}
+				if (linhaAnalisada.contains("Vulnerabilities")) {
+					sigla.setVulnerabilidades(Integer.parseInt(validaStringComPonto(textoCapturado)));
+				}
+				if (linhaAnalisada.contains("Coverage")) {
+					sigla.setCobertura(textoCapturado);
+				}
+				if (linhaAnalisada.contains("Technical Debt")) {
+					sigla.setDebitoTecnico(textoCapturado);
+				}
+				if (linhaAnalisada.contains("Reliability Remediation Effort")) {
+					sigla.setEsforcoConfiabilidade(textoCapturado);
+				}
+				if (linhaAnalisada.contains("Security Remediation Effort")) {
+					sigla.setEsforcoSeguranca(textoCapturado);
 				}
 			}
 
 		} catch (Exception e) {
-			LOG.error("Erro ao capturar elementos no painel");
+			e.getStackTrace();
+			LOG.error("Erro ao capturar elementos no painel ");
 		}
 
 		return sigla;
+	}
+	
+	public String validaStringComPonto(String textoCapturado){
+		LOG.debug("TEXTO RECEBIDO "+textoCapturado);
+		StringBuilder juncaoDaLinha = new StringBuilder();
+		if(textoCapturado.contains(".")){
+			String[] linhaDeCodigo = textoCapturado.split("\\.");
+			LOG.debug(linhaDeCodigo);
+			for (String linha : linhaDeCodigo) {
+				LOG.debug("Linha: "+linha);
+				juncaoDaLinha.append(juncaoDaLinha.toString()+linha);
+				LOG.debug("Junção: "+juncaoDaLinha);
+			}
+		}
+		else{
+			juncaoDaLinha = new StringBuilder(textoCapturado);
+		}
+		LOG.debug(juncaoDaLinha.toString());
+		return juncaoDaLinha.toString();
 	}
 
 	/*
@@ -328,7 +384,7 @@ public class StepBusiness {
 				navegarParaDentroDoPainel();
 				// Capturo o Quality Gate
 				capturarQualityGate();
-				//***
+				// ***
 				// Clico em Vulnerability para poder capturar as
 				// vulnerabilidades.
 				clicarEmVulnerability();
@@ -343,25 +399,48 @@ public class StepBusiness {
 				clicarEmSeverity();
 				// Capturo as Issues
 				capturarIssues();
+				//Insiro nome do Gestor vindo da massa
+				inserirNomeGestor(massaCapturaCompleta.get(i).getGestor());
+				//Inserir data da captura
+				inserirDataCaptura();
+				//Inserir descricao vindo do properties
+				inserirDescricao();
+		
 				System.out.println("Sigla: " + sigla.toString());
 				salvarSiglaBancoDeDados();
 				i++;
-				
+
 			} catch (Exception e) {
 				// Se ocorrer algum erro na captura de um painel eu passo para a
 				// proxima linha
-				System.out.println("Erro ao capturar: "+massaCapturaCompleta.get(i).getPainel());
+				System.out.println("Erro ao capturar: " + massaCapturaCompleta.get(i).getPainel());
 				i++;
 			}
 		}
 	}
 
-	private void salvarSiglaBancoDeDados() {
+	private void inserirDescricao() {
+		Properties arquivo = getProperties();
+		sigla.setDescricao(arquivo.getProperty("prop.server.descricao"));
+	}
 
+	private void inserirDataCaptura() {
+		Date dataAtual = Calendar.getInstance().getTime();
+		sigla.setDataCaptura(dataAtual);
+	}
+
+	private void inserirNomeGestor(String gestor) {
+		sigla.setPainelGestor(gestor);
+	}
+
+	private void salvarSiglaBancoDeDados() {
+		SiglaDAO siglaDAO = new SiglaDAO();
+		siglaDAO.salvar(sigla);
 	}
 
 	private void capturarVulnerabilidades() {
 		LOG.debug(">> Capturando Vulnerabilidades");
+		viewElement.waitForElementIsPresent(10000, page.getQuantidadeCriticals());
 		sigla.setVulnerabilityAlta(Integer.parseInt(viewElement.getText(page.getQuantidadeCriticals()).trim()));
 		sigla.setVulnerabilityBaixa(Integer.parseInt(viewElement.getText(page.getQuantidadeMinors()).trim()));
 		sigla.setVulnerabilityMedia(Integer.parseInt(viewElement.getText(page.getQuantidadeMajors()).trim()));
@@ -371,12 +450,7 @@ public class StepBusiness {
 
 	private void capturarIssues() {
 		LOG.debug(">> Capturando Issues");
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		viewElement.waitForElementIsPresent(10000, page.getQuantidadeCriticals());
 		sigla.setIssuesAlta(Integer.parseInt(viewElement.getText(page.getQuantidadeCriticals()).trim()));
 		sigla.setIssuesBaixa(Integer.parseInt(viewElement.getText(page.getQuantidadeMinors()).trim()));
 		sigla.setIssuesMedia(Integer.parseInt(viewElement.getText(page.getQuantidadeMajors()).trim()));
