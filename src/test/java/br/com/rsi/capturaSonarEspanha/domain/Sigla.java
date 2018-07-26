@@ -8,7 +8,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
-@Entity(name = "AnaliseCodigo")
+@Entity(name = "Analise_Codigo")
 public class Sigla extends GenericDomain{
 	
 	@Column(name = "URL", length = 500)
@@ -44,7 +44,7 @@ public class Sigla extends GenericDomain{
 	private int bugs;
 
 	@Column(name = "Code_Smells")
-	private int codeSmall;
+	private int codeSmells;
 
 	@Column(name = "Vulnerabilidades", nullable = true)
 	private int vulnerabilidades;
@@ -206,12 +206,12 @@ public class Sigla extends GenericDomain{
 		this.bugs = bugs;
 	}
 
-	public int getCodeSmall() {
-		return codeSmall;
+	public int getCodeSmells() {
+		return codeSmells;
 	}
 
-	public void setCodeSmall(int codeSmall) {
-		this.codeSmall = codeSmall;
+	public void setCodeSmells(int codeSmall) {
+		this.codeSmells = codeSmall;
 	}
 
 	public int getVulnerabilidades() {
@@ -371,7 +371,7 @@ public class Sigla extends GenericDomain{
 		return "Sigla [url=" + url + ", painelGestor=" + painelGestor + ", sigla=" + sigla + ", dataCommit="
 				+ dataCommit + ", dataSonar=" + dataSonar + ", versao=" + versao + ", dataCaptura=" + dataCaptura
 				+ ", nomeProjeto=" + nomeProjeto + ", linhaCodigo=" + linhaCodigo + ", bugs=" + bugs + ", codeSmall="
-				+ codeSmall + ", vulnerabilidades=" + vulnerabilidades + ", issuesMuitoAlta=" + issuesMuitoAlta
+				+ codeSmells + ", vulnerabilidades=" + vulnerabilidades + ", issuesMuitoAlta=" + issuesMuitoAlta
 				+ ", issuesAlta=" + issuesAlta + ", issuesMedia=" + issuesMedia + ", issuesBaixa=" + issuesBaixa
 				+ ", issuesMuitoBaixa=" + issuesMuitoBaixa + ", vulnerabilityMuitoAlta=" + vulnerabilityMuitoAlta
 				+ ", vulnerabilityAlta=" + vulnerabilityAlta + ", vulnerabilityMedia=" + vulnerabilityMedia

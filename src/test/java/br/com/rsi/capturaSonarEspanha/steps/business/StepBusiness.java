@@ -215,10 +215,10 @@ public class StepBusiness {
 			for (WebElement linhas : listaDeLinhasDoCorpoPainel) {
 
 				String linhaAnalisada = linhas.getText().toString();
-				LOG.debug(linhaAnalisada);
+				LOG.debug("linha Analisada: "+linhaAnalisada);
 				String textoDaUltimaColuna = linhas.findElements(By.tagName("td")).get(quantidadeRodadasSonar - 1)
 						.getText().toString();
-				LOG.debug(textoDaUltimaColuna);
+				LOG.debug("texto Ultima Coluna: "+textoDaUltimaColuna);
 				String textoCapturado = new String();
 				if (textoDaUltimaColuna == null || textoDaUltimaColuna.equals("")) {
 					textoCapturado = "0";
@@ -234,7 +234,7 @@ public class StepBusiness {
 					sigla.setBugs(Integer.parseInt(validaStringComPonto(textoCapturado)));
 				}
 				if (linhaAnalisada.contains("Code Smells")) {
-					sigla.setCodeSmall(Integer.parseInt(validaStringComPonto(textoCapturado)));
+					sigla.setCodeSmells(Integer.parseInt(validaStringComPonto(textoCapturado)));
 				}
 				if (linhaAnalisada.contains("Vulnerabilities")) {
 					sigla.setVulnerabilidades(Integer.parseInt(validaStringComPonto(textoCapturado)));
@@ -266,17 +266,17 @@ public class StepBusiness {
 		StringBuilder juncaoDaLinha = new StringBuilder();
 		if(textoCapturado.contains(".")){
 			String[] linhaDeCodigo = textoCapturado.split("\\.");
-			LOG.debug(linhaDeCodigo);
+			LOG.debug("Array de String: "+linhaDeCodigo);
 			for (String linha : linhaDeCodigo) {
 				LOG.debug("Linha: "+linha);
-				juncaoDaLinha.append(juncaoDaLinha.toString()+linha);
+				juncaoDaLinha.append(linha);
 				LOG.debug("Junção: "+juncaoDaLinha);
 			}
 		}
 		else{
 			juncaoDaLinha = new StringBuilder(textoCapturado);
 		}
-		LOG.debug(juncaoDaLinha.toString());
+		LOG.debug("Junção Completa :"+juncaoDaLinha.toString());
 		return juncaoDaLinha.toString();
 	}
 
@@ -318,7 +318,7 @@ public class StepBusiness {
 				LOG.debug(">> Versao Localizada");
 
 				siglaCapturada.setDataSonar(dataSonar);
-				siglaCapturada.setVersao(versao);
+				siglaCapturada.setVersao(versao.trim());
 
 				// Capturo o resto do elementos que estao no painel
 				Sigla novaSigla = capturaElementosNoPainel(i);
@@ -327,7 +327,7 @@ public class StepBusiness {
 				LOG.debug(">> Linhas de Codigo Capturada");
 				siglaCapturada.setBugs(novaSigla.getBugs());
 				LOG.debug(">> Bugs Capturado");
-				siglaCapturada.setCodeSmall(novaSigla.getCodeSmall());
+				siglaCapturada.setCodeSmells(novaSigla.getCodeSmells());
 				LOG.debug(">> Code Smell Capturado");
 				siglaCapturada.setVulnerabilidades(novaSigla.getVulnerabilidades());
 				LOG.debug(">> Vulnerabilidades Capturada");
@@ -405,7 +405,8 @@ public class StepBusiness {
 				inserirDataCaptura();
 				//Inserir descricao vindo do properties
 				inserirDescricao();
-		
+				//Inserir nome do Projeto no objeto sigla.
+				inserirNomeProjeto(massaCapturaCompleta.get(i).getPainel());
 				System.out.println("Sigla: " + sigla.toString());
 				salvarSiglaBancoDeDados();
 				i++;
@@ -417,6 +418,10 @@ public class StepBusiness {
 				i++;
 			}
 		}
+	}
+
+	private void inserirNomeProjeto(String painel) {
+		sigla.setNomeProjeto(painel);
 	}
 
 	private void inserirDescricao() {
