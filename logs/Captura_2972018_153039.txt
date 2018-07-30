@@ -1,0 +1,3 @@
+Erro ao capturar: BKS:CCCEXP:CCCEXP_40_ExpresC_MN.CCCEXP_Cache_E_LN
+Erro ao capturar: BKS:PCCCWR:PCCCWR_40_Wrappe_MN.PCCCWR_Wrappern_LN
+

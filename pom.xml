@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -39,29 +40,15 @@
 			<artifactId>sqljdbc4</artifactId>
 			<version>4.0</version>
 		</dependency>
+		
+		<!-- jxl.common.Logger | jline.internal.Log -->
 		<dependency>
 			<groupId>net.serenity-bdd</groupId>
 			<artifactId>serenity-core</artifactId>
 			<version>${serenity.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>net.serenity-bdd</groupId>
-			<artifactId>serenity-report-resources</artifactId>
-			<version>${serenity.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.serenity-bdd</groupId>
-			<artifactId>serenity-cucumber</artifactId>
-			<version>${serenity.cucumber.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.serenity-bdd</groupId>
-			<artifactId>serenity-spring</artifactId>
-			<version>${serenity.version}</version>
-			<scope>test</scope>
-		</dependency>
-
+		
+		<!-- LOG -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
@@ -77,17 +64,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- JUnit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>1.7.0</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -98,37 +80,14 @@
 			<version>4.3.11.Final</version>
 		</dependency>
 
+		<!-- Selenium -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-
-
-		<dependency>
-			<groupId>io.openbdt</groupId>
-			<artifactId>openbdt.core</artifactId>
-			<version>1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.openbdt</groupId>
-			<artifactId>openbdt.adapter.selenium</artifactId>
-			<version>1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.openbdt</groupId>
-			<artifactId>openbdt.plugin.maven</artifactId>
-			<version>1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.0</version>
-		</dependency>
-
+		
+		<!-- Maven Plugin -->
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-archetype-plugin</artifactId>
@@ -149,7 +108,6 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
@@ -157,89 +115,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.20.1</version>
-
-				<dependencies>
-					<dependency>
-						<groupId>io.openbdt</groupId>
-						<artifactId>openbdt.core</artifactId>
-						<version>1.0</version>
-					</dependency>
-				</dependencies>
-
-				<configuration>
-					<includes>
-						<include>br/com/rsi/capturaSonarEspanha/runner/*.java</include>
-					</includes>
-
-					<parallel>methods</parallel>
-					<threadCount>2</threadCount>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>net.serenity-bdd.maven.plugins</groupId>
-				<artifactId>serenity-maven-plugin</artifactId>
-				<version>${serenity.maven.version}</version>
-				<executions>
-					<execution>
-						<id>serenity-reports</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>net.serenity-bdd</groupId>
-						<artifactId>serenity-core</artifactId>
-						<version>${serenity.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>net.serenity-bdd</groupId>
-						<artifactId>serenity-report-resources</artifactId>
-						<version>${serenity.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.2</version>
-				<configuration>
-					<goalPrefix>openbdt.plugin.maven</goalPrefix>
-					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-					<commandlineArgs>-Dfile.encoding=UTF-8</commandlineArgs>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-				<executions>
-					<execution>
-						<id>mojo-descriptor</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>descriptor</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report-goal</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 </project>

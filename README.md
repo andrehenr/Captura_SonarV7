@@ -1,5 +1,4 @@
 # Sample BDT With framework OpenBdt 
-# Captura Sonar
 __
 ##### - Preparing the environment:
 - Before running the project already created, make sure the environment is ready to use.
@@ -13,4 +12,4 @@ It will install openbdt relative dependencies in Maven local Repository. After t
 - Inside project folder, insert the command:
 ```sh
     mvn verify io.openbdt:openbdt.plugin.maven:format-report
-```
+```# Captura Sonar

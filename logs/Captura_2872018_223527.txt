@@ -1,0 +1,15 @@
+Erro ao localizar Painel 
+BKS:CCCEXP:CCCEXP_40_ExpresC_MN.CCCEXP_Cache_E_LNErro ao capturar Vulnerabilidades 
+Erro ao capturar Issues 
+Erro ao inserir painel gestor 
+Erro ao inserir data de Captura 
+Erro ao inserir descricao 
+Erro ao capturar: BKS:CCCEXP:CCCEXP_40_ExpresC_MN.CCCEXP_Cache_E_LN
+Erro ao localizar Painel 
+BKS:PCCCWR:PCCCWR_40_Wrappe_MN.PCCCWR_Wrappern_LNErro ao capturar Vulnerabilidades 
+Erro ao capturar Issues 
+Erro ao inserir painel gestor 
+Erro ao inserir data de Captura 
+Erro ao inserir descricao 
+Erro ao capturar: BKS:PCCCWR:PCCCWR_40_Wrappe_MN.PCCCWR_Wrappern_LN
+
