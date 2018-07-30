@@ -10,6 +10,7 @@ import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 	private static final SessionFactory fabricaSessoes = criarFabricaDeSessoes();
+	private static ServiceRegistry serviceRegistry;
 	
 	/**
 	 * Cria sessoes com o banco de dados
@@ -38,13 +39,13 @@ public class HibernateUtil {
 			properties.put("hibernate.connection.url", "jdbc:sqlserver://"+dadosDB.getProperty("prop.server.db_host")+";"+"databaseName="+dadosDB.getProperty("prop.server.db_name"));
 			properties.put("hibernate.connection.username", dadosDB.getProperty("prop.server.usuarioSQL"));
 			properties.put("hibernate.connection.password", dadosDB.getProperty("prop.server.senhaSQL"));
-			properties.put("show_sql", "false");
+			properties.put("show_sql", "true");
 			//Cria as tabelas do banco de dados "Create|Update|Validade"
 			properties.put("hbm2ddl.auto", "update");
 			configuration.addProperties(properties);
 			configuration.configure();
 
-			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+			serviceRegistry = new StandardServiceRegistryBuilder()
 					.applySettings(configuration.getProperties()).build();
 
 			SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
@@ -57,6 +58,10 @@ public class HibernateUtil {
 			System.err.println("Falha ao criar fabrica de sessão." + ex);
 			throw new ExceptionInInitializerError(ex);
 		}
+	}
+	
+	public static void fechaSessao(){
+		StandardServiceRegistryBuilder.destroy(serviceRegistry);
 	}
 	
 	/**
