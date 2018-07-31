@@ -1,0 +1,197 @@
+----------------------
+Painel BKS:CCCEXP:CCCEXP_40_ExpresC_MN.CCCEXP_Cache_E_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+----------------------
+Painel BKS:CCCAAC:CCCAAC_40_ADCart_MP.CCCAAC_AdcartE_LP
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Erro ao capturar: BKS:CCCAAC:CCCAAC_40_ADCart_MP.CCCAAC_AdcartE_LP
+----------------------
+Painel BKS:PCCCWR:PCCCWR_40_Wrappe_MN.PCCCWR_Wrappern_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Erro ao capturar: BKS:PCCCWR:PCCCWR_40_Wrappe_MN.PCCCWR_Wrappern_LN
+----------------------
+Painel BKS:CCCATI:CCCATI_40_TICart_MP.CCCATI_TicartE_LP
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+----------------------
+Painel BKS:CCCAPG:CCCAPG_40_PGlobS_MN.CCCAPG_Params_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+----------------------
+Painel BKS:CCCAPA:CCCAPA_40_ParceC_MN.CCCAPA_ParcelLic_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+----------------------
+Painel BKS:CCCAPA:CCCAPA_40_ParceE_MN.CCCAPA_Parcel_EG_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+----------------------
+Painel BKS:CCCAFE:CCCAFE_40_FEspecE_MP.CCCAFE_FespecE_LP_CS
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Erro ao capturar: BKS:CCCAFE:CCCAFE_40_FEspecE_MP.CCCAFE_FespecE_LP_CS
+----------------------
+Painel BKS:CCCAAP:CCCAAP_40_ACPlas_MP.CCCAAP_AcplasE_LP
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Erro ao capturar: BKS:CCCAAP:CCCAAP_40_ACPlas_MP.CCCAAP_AcplasE_LP
+----------------------
+Painel BKS:PCCTAN:PCCTAN_40_TDevoN_MN.PCCTAN_Tdevoln_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Erro ao capturar: BKS:PCCTAN:PCCTAN_40_TDevoN_MN.PCCTAN_Tdevoln_LN
+----------------------
+Painel BKS:PCCSMC:PCCSMC_40_SimCanPAR_MN.PCCSMC_Params_E_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+----------------------
+Painel BKS:CICBRA:CICBRA_40_LNIntr_MN.CICBRA_LNIntr_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+

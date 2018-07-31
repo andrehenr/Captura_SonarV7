@@ -8,8 +8,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
-@Entity(name = "Analise_Codigo")
-public class Sigla extends GenericDomain{
+@Entity
+public class AnaliseCodigoEspanha extends GenericDomain{
 	
 	@Column(name = "URL", length = 500)
 	private String url;

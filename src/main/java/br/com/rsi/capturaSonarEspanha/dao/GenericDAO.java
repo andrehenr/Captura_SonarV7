@@ -42,9 +42,12 @@ public class GenericDAO<Entidade> {
 			throw erro;
 		} finally {
 			sessao.close();
-			HibernateUtil.fechaSessao();
 		}
 
+	}
+	
+	public static void fecharConexao(){
+		HibernateUtil.fechaSessao();
 	}
 
 }

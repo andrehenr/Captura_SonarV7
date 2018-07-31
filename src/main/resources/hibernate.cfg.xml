@@ -9,6 +9,7 @@
 		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
 		<!-- Outras configuracoes estao no br.com.rsi.capturaSonarEspanha.util.HibernateUtil.java -->
 
+		<property name="hbm2ddl.auto">update</property>
 		<!-- Pool de Conexões. -->
 		<!-- necessário trocar o Pool xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 		<property name="connection.pool_size">1</property>
@@ -19,7 +20,7 @@
 		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
 
 		<!-- Mapeamento das entidades -->
-		<mapping class="br.com.rsi.capturaSonarEspanha.domain.Sigla" />
+		<mapping class="br.com.rsi.capturaSonarEspanha.domain.AnaliseCodigoEspanha" />
 
 	</session-factory>
 

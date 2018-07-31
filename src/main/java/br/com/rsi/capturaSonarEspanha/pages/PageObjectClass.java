@@ -27,7 +27,7 @@ public class PageObjectClass {
 	
 	private By issues = By.xpath("//*[@class='active']/a");
 
-	private By vulnerability = By.xpath("(//a[contains(@href,'VULNERABILITY')])[1]");
+	private By vulnerability = By.xpath("//a[contains(@href,'VULNERABILITY')]");
 
 	private By severity = By.xpath("//*[@data-property='severities']");
 

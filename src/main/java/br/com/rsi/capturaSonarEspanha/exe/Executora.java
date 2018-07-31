@@ -24,8 +24,8 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import br.com.rsi.capturaSonarEspanha.dao.SiglaDAO;
-import br.com.rsi.capturaSonarEspanha.domain.Sigla;
+import br.com.rsi.capturaSonarEspanha.dao.AnaliseCodigoEspanhaDAO;
+import br.com.rsi.capturaSonarEspanha.domain.AnaliseCodigoEspanha;
 import br.com.rsi.capturaSonarEspanha.pages.PageObjectClass;
 import br.com.rsi.capturaSonarEspanha.util.LerArquivoCSV;
 import br.com.rsi.capturaSonarEspanha.util.MassaCaptura;
@@ -56,19 +56,22 @@ public class Executora {
 			preencherSenha(driver, dadosDB.getProperty("prop.server.password"));
 			clicarEmLogIn(driver);
 			iniciarCapturaDosPaineis(driver);
-			driver.quit();
 
 		} catch (Exception e) {
 			LOG.debug("Erro ao capturar siglas devido a : " + e.getMessage());
+		} finally {
+				driver.close();
+				driver.quit();
+				service.stop();
+			AnaliseCodigoEspanhaDAO.fecharConexao();
 		}
-		
 
 	}
 	// Termino da metodo main
 
 	private static Logger LOG = Logger.getLogger(Executora.class);
 
-	private static Sigla sigla; // Objeto utilizado para a persistencia de cada
+	private static AnaliseCodigoEspanha sigla; // Objeto utilizado para a persistencia de cada
 								// painel
 	// da massa de captura
 
@@ -172,11 +175,10 @@ public class Executora {
 		try {
 			WebElement linkIssues = driver.findElement(new PageObjectClass().getIssues());
 			driver.navigate().to(linkIssues.getAttribute("href"));
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			// Esperar por 20 segndos, ate o elemento que possui o total de
+			// Code Smells apareca no arquivo DOM da pagina, isso me garante que a pagina recarregou.
+			new WebDriverWait(driver, 20000).until(
+					ExpectedConditions.presenceOfElementLocated(new PageObjectClass().getQuantidadeCodeSmells()));
 		} catch (Exception e) {
 			LOG.debug("Erro ao capturar link issues");
 		}
@@ -186,9 +188,9 @@ public class Executora {
 	public static void clicarEmVulnerability(WebDriver driver) {
 		driver.findElement(new PageObjectClass().getVulnerability()).click();
 		LOG.debug(">> Clicando em vulnerabilidades");
-		// Esperar por 15 segndos, ate o elemento que possui o total de
+		// Esperar por 20 segndos, ate o elemento que possui o total de
 		// vuneralidades aparecer no arquivo DOM da pagina
-		new WebDriverWait(driver, 15000).until(
+		new WebDriverWait(driver, 20000).until(
 				ExpectedConditions.presenceOfElementLocated(new PageObjectClass().getQuantidadeVulnerabilidades()));
 
 	}
@@ -233,7 +235,7 @@ public class Executora {
 		while (i < massaCapturaCompleta.size()) {
 			try {
 				clicarGestor(massaCapturaCompleta.get(i).getGestor(), driver);
-				Sigla sigla = selecionaPainel(massaCapturaCompleta.get(i).getPainel(), driver);
+				AnaliseCodigoEspanha sigla = selecionaPainel(massaCapturaCompleta.get(i).getPainel(), driver);
 				// log.append(sigla.toString() + "\n");
 				LOG.debug(sigla.toString());
 				i++;
@@ -307,11 +309,11 @@ public class Executora {
 
 	}
 
-	private static Sigla capturaElementosNoPainel(int posicaoPainelDentrodoGestor, WebDriver driver) {
-		Sigla sigla = null;
+	private static AnaliseCodigoEspanha capturaElementosNoPainel(int posicaoPainelDentrodoGestor, WebDriver driver) {
+		AnaliseCodigoEspanha sigla = null;
 
 		try {
-			sigla = new Sigla();
+			sigla = new AnaliseCodigoEspanha();
 			// Capturo em uma lista todas as linhas a partir de Lines of Code
 			List<WebElement> listaBodyDosPaineis = driver.findElements(new PageObjectClass().getListaCorpoDosPaineis());
 			List<WebElement> listaDeLinhasDoCorpoPainel = listaBodyDosPaineis.get(posicaoPainelDentrodoGestor)
@@ -401,10 +403,10 @@ public class Executora {
 	 * Esforço de Segurança e Quality Gate
 	 * 
 	 */
-	private static Sigla selecionaPainel(String painel, WebDriver driver) {
+	private static AnaliseCodigoEspanha selecionaPainel(String painel, WebDriver driver) {
 		List<WebElement> linksPaineis = driver.findElements(new PageObjectClass().getListaLinksPaineis());
 		int i = 0;
-		Sigla siglaCapturada = null;
+		AnaliseCodigoEspanha siglaCapturada = null;
 		boolean encontrarPainel = false;
 		for (WebElement linkPainel : linksPaineis) {
 			if (linkPainel.getText().toString().trim().equals(painel.toUpperCase())) {
@@ -416,7 +418,7 @@ public class Executora {
 				LOG.debug("--------------------------------------");
 				LOG.debug(">> " + logPainelEncontrado.replace("\n", ""));
 				LOG.debug("--------------------------------------");
-				siglaCapturada = new Sigla();
+				siglaCapturada = new AnaliseCodigoEspanha();
 				// Dentro da lista de Nomes dos Paineis (linksPaineis) é
 				// possível capturar o link do painel coletando o atributo href
 				siglaCapturada.setUrl(capturaURLPainel(linkPainel));
@@ -439,7 +441,7 @@ public class Executora {
 				log.append("Versao Localizada\n");
 
 				// Capturo o resto do elementos que estao no painel
-				Sigla novaSigla = capturaElementosNoPainel(i, driver);
+				AnaliseCodigoEspanha novaSigla = capturaElementosNoPainel(i, driver);
 
 				siglaCapturada.setLinhaCodigo(novaSigla.getLinhaCodigo());
 				LOG.debug(">> Linhas de Codigo Capturada");
@@ -509,7 +511,7 @@ public class Executora {
 			int i = 0;
 			while (i < massaCapturaCompleta.size()) {
 				try {
-					sigla = new Sigla();
+					sigla = new AnaliseCodigoEspanha();
 					clicarGestor(massaCapturaCompleta.get(i).getGestor(), driver);
 					sigla = selecionaPainel(massaCapturaCompleta.get(i).getPainel(), driver);
 					// Entro na pagina do painel
@@ -559,6 +561,7 @@ public class Executora {
 			LOG.debug("Erro ao capturar siglas");
 			log.append("Erro ao capturar siglas");
 		}
+
 	}
 
 	private static void inserirNomeProjeto(String painel) {
@@ -602,7 +605,7 @@ public class Executora {
 
 	private static void salvarSiglaBancoDeDados() {
 		try {
-			SiglaDAO siglaDAO = new SiglaDAO();
+			AnaliseCodigoEspanhaDAO siglaDAO = new AnaliseCodigoEspanhaDAO();
 			siglaDAO.salvar(sigla);
 			LOG.debug("Captura inserida no banco");
 			log.append("Captura inserida no banco\n");
