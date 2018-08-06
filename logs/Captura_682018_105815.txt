@@ -1,0 +1,19 @@
+----------------------
+Painel BKS:CCCAPA:CCCAPA_40_ParceA_MN.CCCAPA_CacheA_LN
+----------------------
+URL Capturada
+Nome da Sigla Capturada
+Versao Localizada
+Linhas de Codigo Capturada
+Cobertura Capturada
+Debito Tecnico Capturado
+Esforco de Confiabilidade Capturado
+Esforco de Seguranca Capturado
+Quality Gate capturado 
+Vulnerabilidades capturadas
+Issues capturadas
+Painel do Gestor inserido
+Data de Captura inserida
+Descricao inserida
+Captura inserida no banco
+

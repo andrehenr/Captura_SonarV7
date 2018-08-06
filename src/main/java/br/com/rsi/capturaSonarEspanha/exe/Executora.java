@@ -186,7 +186,8 @@ public class Executora {
 	}
 
 	public static void clicarEmVulnerability(WebDriver driver) {
-		driver.findElement(new PageObjectClass().getVulnerability()).click();
+		WebElement linkPainelDeVulnerabilidades = driver.findElement(new PageObjectClass().getVulnerability());
+		driver.navigate().to(linkPainelDeVulnerabilidades.getAttribute("href"));
 		LOG.debug(">> Clicando em vulnerabilidades");
 		// Esperar por 20 segndos, ate o elemento que possui o total de
 		// vuneralidades aparecer no arquivo DOM da pagina
