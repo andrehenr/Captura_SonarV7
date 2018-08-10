@@ -40,7 +40,7 @@ public class Executora {
 		try {
 			service = new ChromeDriverService.Builder()
 					.usingDriverExecutable(
-							new File("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"))
+							new File(".//driver//chromedriver.exe"))
 					.usingAnyFreePort().build();
 			try {
 				service.start();
