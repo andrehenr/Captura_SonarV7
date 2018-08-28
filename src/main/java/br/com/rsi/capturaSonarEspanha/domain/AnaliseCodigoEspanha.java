@@ -1,15 +1,24 @@
 package br.com.rsi.capturaSonarEspanha.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
-@Entity
-public class AnaliseCodigoEspanha extends GenericDomain{
+@Entity(name="Automacao_Analise_Codigo")
+public class AnaliseCodigoEspanha implements Serializable{
+	
+	@Column(nullable = false, name = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+	private int id;
 	
 	@Column(name = "URL", length = 500)
 	private String url;
@@ -39,6 +48,9 @@ public class AnaliseCodigoEspanha extends GenericDomain{
 
 	@Column(name = "Linhas_Codigo")
 	private int linhaCodigo;
+	
+	@Column(name = "Linhas_Codigo_Ant")
+	private int linhaCodigoAnt;
 
 	@Column(name = "Bugs")
 	private int bugs;
@@ -108,6 +120,12 @@ public class AnaliseCodigoEspanha extends GenericDomain{
 
 	@Column(name = "Tipo")
 	private String tipo;
+	
+	@Column(name = "Coeficiente")
+	private String coeficiente;
+	
+	@Column(name = "DevOps")
+	private String devops;
 	// --------------------------------------------------
 
 	public String getUrl() {
