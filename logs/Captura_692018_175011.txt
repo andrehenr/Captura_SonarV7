@@ -1,0 +1,3 @@
+Erro ao capturar: INSPECAO_DE_CODIGO-RSI
+Erro ao capturar: BCL-DADOS DA LINHA DO TEMPO DO CLIENTE - HK
+

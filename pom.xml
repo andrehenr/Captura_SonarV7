@@ -5,7 +5,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.rsi</groupId>
-	<artifactId>capturaSonarEspanha</artifactId>
+	<artifactId>novaCaptura</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
 	<name>capturaSonarEspanha</name>

@@ -2,25 +2,20 @@ package br.com.rsi.capturaSonarEspanha.util;
 
 public class MassaCaptura {
 
-	private String nome;
-	private String gestor;
+	private String nomePainel;
 
-	MassaCaptura(String gestor, String painel) {
-		this.gestor = gestor;
-		this.nome = painel;
+	MassaCaptura(String painel) {
+		this.nomePainel = painel;
 	}
 
 	public String getPainel() {
-		return nome;
+		return nomePainel;
 	}
 
-	public String getGestor() {
-		return gestor;
-	}
 
 	@Override
 	public String toString() {
-		return "MassaCaptura [painel=" + nome + ", gestor=" + gestor + "]";
+		return "MassaCaptura [painel=" + nomePainel + "]";
 	}
 	
 	

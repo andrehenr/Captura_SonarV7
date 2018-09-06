@@ -10,56 +10,56 @@ public class PageObjectClass {
 	private By campoSenha = By.id("password");
 
 	private By botaoLogin = By.xpath("//*[@name='commit']");
-
-	private By labelDashBoards = By.xpath("//*[contains(text(), 'Dashboards')]");
-
-	private By listaLabelGestores = By.xpath("//*[@class='dropdown-menu']/li/a");
-
-	private By listaLinksPaineis = By.xpath("//*[@class='widget-title']/a");
-
-	private By listaDePaineis = By.xpath("//*[@class='block']");
-
-	private By listaCabecalhosDosPaineis = By.xpath("//*[@class='table table-bordered']/thead/tr");
-
-	private By listaCorpoDosPaineis = By.xpath("//*[@class='table table-bordered']/tbody");
-
-	private By divQualityGate = By.xpath("//*[@id='overview-quality-gate']");
 	
-	private By issues = By.xpath("//*[@class='active']/a");
+	private By campoPesquisaPainel = By.xpath("//*[@placeholder='Pesquise pelo nome ou pela chave']");
 
-	private By vulnerability = By.xpath("//a[contains(@href,'VULNERABILITY')]");
-
-	private By severity = By.xpath("//*[@data-property='severities']");
-
-	private By listaSeverity = By.xpath("//*[@id='content']/div/div[1]/div[2]/div/div[5]/div");
-
-	private By quantidadeBlockers = By.xpath("//*[@data-value='BLOCKER']/span[2]");
-
-	private By quantidadeCriticals = By.xpath("//*[@data-value='CRITICAL']/span[2]");
-
-	private By quantidadeInfos = By.xpath("//*[@data-value='INFO']/span[2]");
-
-	private By quantidadeMinors = By.xpath("//*[@data-value='MINOR']/span[2]");
-
-	private By quantidadeMajors = By.xpath("//*[@data-value='MAJOR']/span[2]");
+	private By botaoProjetos = By.xpath("//li/a[@href='/projects']");
 	
-	private By quantidadeBugs = By.xpath("//*[@data-value='BUG']/span[2]");
+	private By labelCobertura = By.xpath("//span[@class='js-overview-main-coverage']");
 	
-	private By quantidadeVulnerabilidades = By.xpath("//*[@data-value='VULNERABILITY']/span[2]");
+	private By labelQualityGate = By.xpath("//span[contains(@class,'level')]");
 	
-	private By quantidadeCodeSmells = By.xpath("//*[@data-value='CODE_SMELL']/span[2]");
-
-	public By getQuantidadeBugs() {
-		return quantidadeBugs;
-	}
-
-	public By getQuantidadeVulnerabilidades() {
-		return quantidadeVulnerabilidades;
-	}
-
-	public By getQuantidadeCodeSmells() {
-		return quantidadeCodeSmells;
-	}
+	private By labelDataExecucao = By.xpath("//*[@class='list-inline']/li[1]");
+	
+	private By labelVersao = By.xpath("//*[@class='list-inline']/li[2]");
+	
+	private By linkAbaProblemas = By.xpath("//ul[@class='navbar-tabs']/li/a[contains(.,'Problemas')]");
+	
+	private By labelBlocker = By.xpath("//a[contains(.,'Impeditivo')]/span[2]");
+	
+	private By labelCritical = By.xpath("//a[contains(.,'Crítico')]/span[2]");
+	
+	private By labelMajor = By.xpath("//a[contains(.,'Alto')]/span[2]");
+	
+	private By labelMinor = By.xpath("//a[contains(.,'Baixo')]/span[2]");
+	
+	private By labelInfo = By.xpath("//a[contains(.,'Informativo')]/span[2]");
+	
+	private By linkBug = By.xpath("//a[contains(.,'Bug')]");
+	
+	private By linkVulnerabilidade = By.xpath("//a[contains(.,'Vulnerabilidade')]");
+	
+	private By linkCodeSmell = By.xpath("//a[contains(.,'Code Smell')]");
+	
+	private By modoExibicaoPorEsforco = By.xpath("//a[contains(.,'Esforço')]");
+	
+	private By opcaoSolucao = By.xpath("//a[contains(.,'Solução')]");
+	
+	private By solucaoNaoResolvido = By.xpath("//a[contains(.,'Não resolvido')]/span[2]");
+	
+	private By linkAbaMedidas = By.xpath("//li/a[contains(.,'Medidas')]");
+	
+	private By linkConfiablidade = By.xpath("//a[contains(.,'Confiabilidade')]");
+	
+	private By remediationEffortConfiabilidade = By.id("measure-reliability_remediation_effort-value");
+	
+	private By linkSeguranca = By.xpath("//a[contains(.,'Segurança')]");
+	
+	private By remediationEffortSegurança = By.id("measure-security_remediation_effort-value");
+	
+	private By linkTamanho = By.xpath("//a[contains(.,'Tamanho')]");
+	
+	private By qtdLinhasCodigo = By.id("measure-ncloc-value");
 
 	public By getCampoLogin() {
 		return campoLogin;
@@ -73,68 +73,103 @@ public class PageObjectClass {
 		return botaoLogin;
 	}
 
-	public By getLabelDashBoards() {
-		return labelDashBoards;
+	public By getCampoPesquisaPainel() {
+		return campoPesquisaPainel;
 	}
 
-	public By getListaLabelGestores() {
-		return listaLabelGestores;
+	public By getBotaoProjetos() {
+		return botaoProjetos;
 	}
 
-	public By getListaLinksPaineis() {
-		return listaLinksPaineis;
+	public By getLabelCobertura() {
+		return labelCobertura;
 	}
 
-	public By getListaDePaineis() {
-		return listaDePaineis;
+	public By getLabelQualityGate() {
+		return labelQualityGate;
 	}
 
-	public By getListaCabecalhosDosPaineis() {
-		return listaCabecalhosDosPaineis;
+	public By getLabelDataExecucao() {
+		return labelDataExecucao;
 	}
 
-	public By getListaCorpoDosPaineis() {
-		return listaCorpoDosPaineis;
+	public By getLabelVersao() {
+		return labelVersao;
 	}
 
-	public By getDivQualityGate() {
-		return divQualityGate;
+	public By getLinkAbaProblemas() {
+		return linkAbaProblemas;
 	}
 
-	public By getIssues() {
-		return issues;
+	public By getLabelBlocker() {
+		return labelBlocker;
 	}
 
-	public By getVulnerability() {
-		return vulnerability;
+	public By getLabelCritical() {
+		return labelCritical;
 	}
 
-	public By getSeverity() {
-		return severity;
+	public By getLabelMajor() {
+		return labelMajor;
 	}
 
-	public By getListaSeverity() {
-		return listaSeverity;
+	public By getLabelMinor() {
+		return labelMinor;
 	}
 
-	public By getQuantidadeBlockers() {
-		return quantidadeBlockers;
+	public By getLabelInfo() {
+		return labelInfo;
 	}
 
-	public By getQuantidadeCriticals() {
-		return quantidadeCriticals;
+	public By getLinkBug() {
+		return linkBug;
 	}
 
-	public By getQuantidadeInfos() {
-		return quantidadeInfos;
+	public By getLinkVulnerabilidade() {
+		return linkVulnerabilidade;
 	}
 
-	public By getQuantidadeMinors() {
-		return quantidadeMinors;
+	public By getLinkCodeSmell() {
+		return linkCodeSmell;
 	}
 
-	public By getQuantidadeMajors() {
-		return quantidadeMajors;
+	public By getModoExibicaoPorEsforco() {
+		return modoExibicaoPorEsforco;
 	}
 
+	public By getOpcaoSolucao() {
+		return opcaoSolucao;
+	}
+
+	public By getSolucaoNaoResolvido() {
+		return solucaoNaoResolvido;
+	}
+
+	public By getLinkAbaMedidas() {
+		return linkAbaMedidas;
+	}
+
+	public By getLinkConfiablidade() {
+		return linkConfiablidade;
+	}
+
+	public By getRemediationEffortConfiabilidade() {
+		return remediationEffortConfiabilidade;
+	}
+
+	public By getLinkSeguranca() {
+		return linkSeguranca;
+	}
+
+	public By getRemediationEffortSegurança() {
+		return remediationEffortSegurança;
+	}
+
+	public By getLinkTamanho() {
+		return linkTamanho;
+	}
+
+	public By getQtdLinhasCodigo() {
+		return qtdLinhasCodigo;
+	}
 }

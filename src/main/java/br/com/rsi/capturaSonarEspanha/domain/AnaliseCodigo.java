@@ -13,8 +13,7 @@ import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
 @Entity(name="Automacao_Analise_Codigo")
-public class AnaliseCodigoEspanha implements Serializable{
-	
+public class AnaliseCodigo implements Serializable{
 	@Column(nullable = false, name = "ID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id

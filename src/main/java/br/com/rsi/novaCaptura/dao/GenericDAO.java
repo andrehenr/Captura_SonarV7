@@ -1,4 +1,4 @@
-package br.com.rsi.capturaSonarEspanha.dao;
+package br.com.rsi.novaCaptura.dao;
 
 import java.lang.reflect.ParameterizedType;
 

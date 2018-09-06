@@ -28,14 +28,12 @@ public class LerArquivoCSV {
 		String csvArquivo = dadosDB.getProperty("prop.massa");
 		BufferedReader conteudoCSV = null;
 		String linha = "";
-		String csvSeparadorCampo = ",";
-		String[] sigla = null;
 		List<MassaCaptura> massaCapturaCompleta = new ArrayList<>();
 		try {
 			conteudoCSV = new BufferedReader(new FileReader(csvArquivo));
 			while ((linha = conteudoCSV.readLine()) != null) {
-				sigla = linha.split(csvSeparadorCampo);
-				MassaCaptura linhaDaMassa = new MassaCaptura(sigla[0], sigla[1]);
+				String nomePainel = linha;
+				MassaCaptura linhaDaMassa = new MassaCaptura(nomePainel);
 				massaCapturaCompleta.add(linhaDaMassa);
 			}
 		} catch (FileNotFoundException e) {
