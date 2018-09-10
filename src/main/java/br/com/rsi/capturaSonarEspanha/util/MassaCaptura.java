@@ -2,25 +2,25 @@ package br.com.rsi.capturaSonarEspanha.util;
 
 public class MassaCaptura {
 
-	private String nomePainel;
-	private Boolean captura;
+	private String idPainel;
+	private boolean captura;
 
-	MassaCaptura(String painel, boolean captura) {
-		this.nomePainel = painel;
+	MassaCaptura(String painel, Boolean captura) {
+		this.idPainel = painel;
 		this.captura = captura;
 	}
 
-	public String getPainel() {
-		return nomePainel;
+	public String getNomePainel() {
+		return idPainel;
 	}
 
-	public boolean isCaptura() {
+	public boolean getCaptura() {
 		return captura;
 	}
 
 	@Override
 	public String toString() {
-		return "MassaCaptura [painel=" + nomePainel + "]";
+		return "MassaCaptura [painel=" + idPainel + "]";
 	}
 
 }

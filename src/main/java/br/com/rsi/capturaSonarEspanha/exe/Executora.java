@@ -7,7 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
@@ -43,7 +46,9 @@ public class Executora {
 			Properties dadosDB = getProperties();
 			driver = new ChromeDriver(service);
 
-			open(driver, dadosDB.getProperty("prop.server.host"));
+			URL_SONAR = dadosDB.getProperty("prop.server.host");
+
+			open(driver, URL_SONAR + "/sessions/new");
 			preencherLogin(driver, dadosDB.getProperty("prop.server.login"));
 			preencherSenha(driver, dadosDB.getProperty("prop.server.password"));
 			clicarEmLogIn(driver);
@@ -61,6 +66,8 @@ public class Executora {
 	}
 	// Termino da metodo main
 
+	private static String URL_SONAR;
+
 	private static Logger LOG = Logger.getLogger(Executora.class);
 
 	private static AnaliseCodigo sigla; // Objeto utilizado para a persistencia
@@ -71,6 +78,8 @@ public class Executora {
 	private static FileWriter arq;
 	private static StringBuilder log;
 	private static PrintWriter gravarArq;
+
+	private static String nomePainel;
 
 	private static void criarLogCaptura() {
 
@@ -163,8 +172,12 @@ public class Executora {
 			int i = 0;
 			while (i < massaCapturaCompleta.size()) {
 				try {
-					sigla = new AnaliseCodigo();
-					selecionaPainel(massaCapturaCompleta.get(i).getPainel(), driver);
+					if (massaCapturaCompleta.get(i).getCaptura()) {
+						sigla = new AnaliseCodigo();
+						nomePainel = massaCapturaCompleta.get(i).getNomePainel();
+						selecionaPainel(URL_SONAR + "/dashboard?id=" + nomePainel, driver);
+						System.out.println(sigla);
+					}
 					// // Entro na pagina do painel
 					// navegarParaDentroDoPainel(driver);
 					// // Capturo o Quality Gate
@@ -199,8 +212,8 @@ public class Executora {
 				} catch (Exception e) {
 					// Se ocorrer algum erro na captura de um painel eu passo
 					// para a proxima linha
-					LOG.debug("Erro ao capturar: " + massaCapturaCompleta.get(i).getPainel());
-					log.append("Erro ao capturar: " + massaCapturaCompleta.get(i).getPainel() + "\n");
+					LOG.debug("Erro ao capturar: " + massaCapturaCompleta.get(i).getNomePainel());
+					log.append("Erro ao capturar: " + massaCapturaCompleta.get(i).getNomePainel() + "\n");
 
 				} finally {
 					i++;
@@ -217,34 +230,144 @@ public class Executora {
 	}
 
 	private static void selecionaPainel(String painel, WebDriver driver) {
-		By xpathCampoPesquisaPaineis = new PageObjectClass().getCampoPesquisaPainel();
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(xpathCampoPesquisaPaineis));
-		WebElement campoPesquisaPainel = driver.findElement(xpathCampoPesquisaPaineis);
-		System.out.println(painel);
-		campoPesquisaPainel.sendKeys(painel);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		By xpathLinkPainel = By.xpath("//a[contains(.,'" + painel + "')]");
-		driver.findElement(xpathLinkPainel).click();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		sigla.setUrl(painel);
+		driver.navigate().to(painel);
 		capturaCobertura(driver);
-		By xpathBotaoProjeto = new PageObjectClass().getBotaoProjetos();
-		driver.findElement(xpathBotaoProjeto).click();
 	}
 
 	private static void capturaCobertura(WebDriver driver) {
-		String cobertura = driver.findElement(new PageObjectClass().getLabelCobertura()).getText().trim().toString();
-		System.out.println(cobertura);
+		By elementoExibeCobertura = new PageObjectClass().getLabelCobertura();
+		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(elementoExibeCobertura));
+		String cobertura = driver.findElement(elementoExibeCobertura).getText().trim().toString();
 		sigla.setCobertura(cobertura);
+		LOG.debug("-> Cobertura Capturada");
+		log.append("Cobertura Capturada");
+		capturaNomePainel(driver);
+	}
+
+	private static void capturaNomePainel(WebDriver driver) {
+		By nomePainel = new PageObjectClass().getLabelNomePainel();
+		String nomeProjeto = driver.findElement(nomePainel).getAttribute("title").toString();
+		sigla.setNomeProjeto(nomeProjeto);
+		LOG.debug("-> Nome do Painel Capturado");
+		log.append("Nome do Painel Capturado");
+		capturaQualityGate(driver);
+	}
+
+	private static void capturaQualityGate(WebDriver driver) {
+		By qualityGate = new PageObjectClass().getLabelQualityGate();
+		String resultadoQualityGate = driver.findElement(qualityGate).getText().toString().trim();
+		sigla.setQualidade(resultadoQualityGate);
+		LOG.debug("-> Quality Gate Capturado");
+		log.append("Quality Gate Capturado");
+		capturaDataAnalise(driver);
+	}
+
+	private static void capturaDataAnalise(WebDriver driver) {
+		// Capturando a data de execução no Sonar e separando o dia, mes e ano
+		By dataExecucao = new PageObjectClass().getLabelDataExecucao();
+		String[] dataExecucaoAtual = driver.findElement(dataExecucao).getText().toString().split(" de ");
+		Calendar data = Calendar.getInstance();
+		data.set(Integer.parseInt(dataExecucaoAtual[2].substring(0, 4)), mesComoInteiro(dataExecucaoAtual[1]),
+				Integer.parseInt(dataExecucaoAtual[0]), 0, 0, 0);
+		Date dataExecucaoFormatoDate = new Date(data.getTime().getTime());
+		sigla.setDataSonar(dataExecucaoFormatoDate);
+		LOG.debug("-> Data de Execução Capturada");
+		log.append("Data de Execução Capturada");
+		capturaVersao(driver);
+	}
+
+	private static void capturaVersao(WebDriver driver) {
+		String versao = driver.findElement(new PageObjectClass().getLabelVersao()).getText().toString().trim();
+		sigla.setVersao(versao);
+		LOG.debug("-> Versao Capturada");
+		log.append("Versao Capturada");
+		capturaIssues(driver);
+	}
+
+	private static void capturaIssues(WebDriver driver) {
+		PageObjectClass page = new PageObjectClass();
+		// Captura do bugs
+		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=BUG");
+		sigla.setBugs(verificaIssues(page.getQtdBugs(), driver));
+		LOG.debug("-> Bugs Capturados");
+		log.append("Bugs Capturados");
+
+		// Captura dos code smells
+		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=CODE_SMELL");
+		sigla.setCodeSmells(verificaIssues(page.getQtdCodeSmell(), driver));
+		LOG.debug("-> CodeSmells Capturados");
+		log.append("CodeSmells Capturados");
+
+
+		// Captura do total de vulnerabilidades
+		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=VULNERABILITY");
+		sigla.setVulnerabilidades(verificaIssues(page.getQtdVulnerabilidade(), driver));
+		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=VULNERABILITY");
+		capturaVulnerabilidadesporGravidade(driver);
+		LOG.debug("-> Vulnerabilidades Capturadas");
+		log.append("Vulnerabilidades Capturadas");
+
+		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false");
+		capturaIssuesPorGravidade(driver);
+	}
+
+	private static void capturaVulnerabilidadesporGravidade(WebDriver driver) {
+		PageObjectClass page = new PageObjectClass();
+		new WebDriverWait(driver, 10000).until(ExpectedConditions.presenceOfElementLocated(page.getLabelVulnerabilidadeBlocker()));
+		sigla.setVulnerabilityMuitoAlta(Integer.parseInt(driver.findElement(page.getLabelVulnerabilidadeBlocker()).getText().toString()));
+		sigla.setVulnerabilityAlta(Integer.parseInt(driver.findElement(page.getLabelVulnerabilidadeCritical()).getText().toString()));
+		sigla.setVulnerabilityMedia(Integer.parseInt(driver.findElement(page.getLabelVulnerabilidadeMajor()).getText().toString()));
+		sigla.setVulnerabilityBaixa(Integer.parseInt(driver.findElement(page.getLabelVulnerabilidadeMinor()).getText().toString()));
+		sigla.setVulnerabilityMuitoBaixa(Integer.parseInt(driver.findElement(page.getLabelVulnerabilidadeInfo()).getText().toString()));
+	}
+
+	private static void capturaIssuesPorGravidade(WebDriver driver) {
+		PageObjectClass page = new PageObjectClass();
+		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(page.getLabelBlocker()));
+		sigla.setIssuesMuitoAlta(Integer.parseInt(driver.findElement(page.getLabelBlocker()).getText().toString()));
+		sigla.setIssuesAlta(Integer.parseInt(driver.findElement(page.getLabelCritical()).getText().toString()));
+		sigla.setIssuesMedia(Integer.parseInt(driver.findElement(page.getLabelMajor()).getText().toString()));
+		sigla.setIssuesBaixa(Integer.parseInt(driver.findElement(page.getLabelMinor()).getText().toString()));
+		sigla.setIssuesMuitoBaixa(Integer.parseInt(driver.findElement(page.getLabelInfo()).getText().toString()));
+	}
+
+	// Metodo para capturar o total de bugs e o total de vulnerabilidades
+	private static int verificaIssues(By quantidadePaginaProblemas, WebDriver driver) {
+		PageObjectClass page = new PageObjectClass();
+		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(quantidadePaginaProblemas));
+		String valorElemento = driver.findElement(quantidadePaginaProblemas).getText().toString();
+		int valorFinal = 0;
+		if (valorElemento.contains("k")) {
+			for (WebElement elemento : driver.findElements(page.getProblemasPorGravidade())) {
+				valorFinal += Integer.parseInt(elemento.getText().toString());
+			}
+
+		} else {
+			valorFinal = Integer.parseInt(valorElemento);
+		}
+
+		return valorFinal;
+	}
+
+	private static int mesComoInteiro(String mesComoString) {
+
+		Map<String, Integer> meses = new HashMap<String, Integer>();
+
+		meses.put("janeiro", 1);
+		meses.put("fevereiro", 2);
+		meses.put("março", 3);
+		meses.put("abril", 4);
+		meses.put("maio", 5);
+		meses.put("junho", 6);
+		meses.put("julho", 7);
+		meses.put("agosto", 8);
+		meses.put("setembro", 9);
+		meses.put("outubro", 10);
+		meses.put("novembro", 11);
+		meses.put("dezembro", 12);
+
+		return meses.get(mesComoString) - 1;
 	}
 
 	// public static void clicarEmDashBoards(WebDriver driver) {

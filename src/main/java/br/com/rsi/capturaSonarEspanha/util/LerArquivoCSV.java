@@ -1,13 +1,9 @@
 package br.com.rsi.capturaSonarEspanha.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import jxl.Cell;
@@ -16,7 +12,10 @@ import jxl.Workbook;
 
 public class LerArquivoCSV {
 
-	public static List<MassaCaptura> getInformacoesArquivo() {
+	public static ArrayList<MassaCaptura> getInformacoesArquivo() {
+		
+		//Lista de Paineis na massa a serem capturados
+		ArrayList<MassaCaptura> listaCaptura = new ArrayList<>();
 
 		// Instancio um Properties
 		Properties dadosDB = new Properties();
@@ -32,30 +31,37 @@ public class LerArquivoCSV {
 		String csvArquivo = dadosDB.getProperty("prop.massa");
 		
 		try {
+			
 			// Carrega a planilha
 			Workbook workbook = null;
 			workbook = Workbook.getWorkbook(new File(csvArquivo));
-
 			// Seleciona a aba do excel
 			Sheet sheet = workbook.getSheet(0);
 			// Numero de linhas com dados do xls
 			int linhas = sheet.getRows();
-			for (int i = 1; i < linhas; i++) {
-				
-				Cell celulaIDPainel = sheet.getCell(1, i); // coluna 1 - ID do Painel
-				Cell celulaCaptura = sheet.getCell(2, i); // coluna 2 - true ou false para captura
-				MassaCaptura linhaMassaCaptura = new MassaCaptura(celulaIDPainel.getContents().toString().trim(),Boolean.getBoolean(celulaCaptura.getContents().toString()));
-				
+			if(linhas > 0){
+				for (int i = 1; i < linhas; i++) {
+					Cell celulaIDPainel = sheet.getCell(0, i); // coluna 0 - ID do Painel
+					Cell celulaCaptura = sheet.getCell(1, i); // coluna 1 - true ou false para captura
+					System.out.println(celulaIDPainel.getContents().toString()+","+celulaCaptura.getContents().toString());
+					//Verifico se o painel foi selecionado para capturar ou não
+					boolean captura = false;
+					if(celulaCaptura.getContents().toString().equals("true")){
+						captura = true;
+					}
+					//Criando um objeto do tipo massa de captura, que possui o codigo do painel a ser capturado e uma variavel do tipo Boolean que define se o painel deve ou não ser capturado.
+					MassaCaptura linhaMassaCaptura = new MassaCaptura(celulaIDPainel.getContents().toString().trim(),captura);
+					listaCaptura.add(linhaMassaCaptura);
+				}
 			}
+			
 		} catch (NullPointerException e) {
 			System.out.println("Catch 01 ---------------------------------");
 
 		} catch (Exception e) {
 			System.out.println("Catch 02 ---------------------------------");
 		}
-	}
-		
-		
+		return listaCaptura;
 	}
 
 }
