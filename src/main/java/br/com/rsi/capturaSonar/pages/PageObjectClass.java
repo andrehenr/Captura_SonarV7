@@ -1,4 +1,4 @@
-package br.com.rsi.capturaSonarEspanha.pages;
+package br.com.rsi.capturaSonar.pages;
 
 import org.openqa.selenium.By;
 
@@ -53,6 +53,8 @@ public class PageObjectClass {
 			.xpath("//a[contains(@href,'resolved=false&types=VULNERABILITY')]");
 
 	private By qtdCodeSmell = By.xpath("//a[contains(.,'Code Smell')]/span[2]");
+	
+	private By totalProblemasComVirgula = By.xpath("//strong[contains(.,'/')]");
 
 	private By modoExibicaoPorEsforco = By.xpath("//a[contains(.,'Esforço')]");
 
@@ -68,11 +70,15 @@ public class PageObjectClass {
 
 	private By linkSeguranca = By.xpath("//a[contains(.,'Segurança')]");
 
-	private By remediationEffortSegurança = By.id("measure-security_remediation_effort-value");
+	private By remediationEffortSeguranca = By.id("measure-security_remediation_effort-value");
 
 	private By linkTamanho = By.xpath("//a[contains(.,'Tamanho')]");
 
 	private By qtdLinhasCodigo = By.id("measure-ncloc-value");
+	
+	public By getTotalProblemasComVirgula() {
+		return totalProblemasComVirgula;
+	}
 	
 	public By getLabelVulnerabilidadeBlocker() {
 		return labelVulnerabilidadeBlocker;
@@ -198,8 +204,8 @@ public class PageObjectClass {
 		return linkSeguranca;
 	}
 
-	public By getRemediationEffortSegurança() {
-		return remediationEffortSegurança;
+	public By getRemediationEffortSeguranca() {
+		return remediationEffortSeguranca;
 	}
 
 	public By getLinkTamanho() {

@@ -1,4 +1,4 @@
-package br.com.rsi.capturaSonarEspanha.domain;
+package br.com.rsi.capturaSonar.domain;
 
 import java.io.Serializable;
 

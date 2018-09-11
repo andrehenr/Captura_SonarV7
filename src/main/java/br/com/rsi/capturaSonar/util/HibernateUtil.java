@@ -1,4 +1,4 @@
-package br.com.rsi.capturaSonarEspanha.util;
+package br.com.rsi.capturaSonar.util;
 
 import java.io.FileInputStream;
 import java.util.Properties;
