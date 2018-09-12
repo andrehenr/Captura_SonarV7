@@ -1,0 +1,11 @@
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BDI-HK
+Cobertura Capturada 
+Erro ao acessar o painel: http://10.1.11.107:9000/dashboard?id=BDI-HK
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=PIM-HK
+Erro ao acessar o painel: http://10.1.11.107:9000/dashboard?id=PIM-HK
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=MPA-HK
+Erro ao acessar o painel: http://10.1.11.107:9000/dashboard?id=MPA-HK
+

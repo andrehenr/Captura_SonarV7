@@ -1,0 +1,7 @@
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BDI-HK
+Erro ao acessar o painel: http://10.1.11.107:9000/dashboard?id=BDI-HK
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BCL-HK
+Erro ao acessar o painel: http://10.1.11.107:9000/dashboard?id=BCL-HK
+

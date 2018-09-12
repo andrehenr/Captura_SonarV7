@@ -8,17 +8,17 @@ public class PageObjectClass {
 
 	private By campoSenha = By.id("password");
 
-	private By botaoLogin = By.xpath("//*[@name='commit']");
+	private By botaoLogin = By.xpath("//*[@type='submit']");
 
 	private By labelCobertura = By.xpath("//span[@class='js-overview-main-coverage']");
 
 	private By labelQualityGate = By.xpath("//span[contains(@class,'level')]");
 
-	private By labelNomePainel = By.xpath("//span/a[contains(@href,'dashboard')]");
+	private By labelNomePainel = By.xpath("//header/a[contains(@href,'dashboard')]");
 
-	private By labelDataExecucao = By.xpath("//*[@class='list-inline']/li[1]");
+	private By labelDataExecucao = By.xpath("//*[@class='spacer-left text-ellipsis']/span");
 
-	private By labelVersao = By.xpath("//*[@class='list-inline']/li[2]");
+	private By labelVersao = By.xpath("//*[@class='spacer-left text-limited']");
 
 	private By linkAbaProblemas = By.xpath("//ul[@class='navbar-tabs']/li/a[contains(.,'Problemas')]");
 
@@ -30,7 +30,7 @@ public class PageObjectClass {
 
 	private By labelMinor = By.xpath("//*[contains(.,'Baixo')]/span[2]");
 
-	private By labelInfo = By.xpath("//*[contains(.,'Informativo')]/span[2]");
+	private By labelInfo = By.xpath("//*[@data-facet='INFO']/span[2]");
 	
 	private By labelVulnerabilidadeBlocker = By.xpath("//*[contains(.,'Impeditivo')]/span[@class='facet-stat']");
 
@@ -56,11 +56,9 @@ public class PageObjectClass {
 	
 	private By totalProblemasComVirgula = By.xpath("//strong[contains(.,'/')]");
 
-	private By modoExibicaoPorEsforco = By.xpath("//a[contains(.,'Esforço')]");
+	private By modoExibicaoPorEsforco = By.xpath("//a[contains(.,'Manutenibilidade')]");
 
-	private By opcaoSolucao = By.xpath("//a[contains(.,'Solução')]");
-
-	private By solucaoNaoResolvido = By.xpath("//a[contains(.,'Não resolvido')]/span[2]");
+	private By debitoTecnico = By.id("measure-sqale_index-value");
 
 	private By linkAbaMedidas = By.xpath("//li/a[contains(.,'Medidas')]");
 
@@ -180,12 +178,9 @@ public class PageObjectClass {
 		return modoExibicaoPorEsforco;
 	}
 
-	public By getOpcaoSolucao() {
-		return opcaoSolucao;
-	}
 
-	public By getSolucaoNaoResolvido() {
-		return solucaoNaoResolvido;
+	public By getDebitoTecnico() {
+		return debitoTecnico;
 	}
 
 	public By getLinkAbaMedidas() {

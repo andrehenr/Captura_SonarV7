@@ -13,7 +13,7 @@
 		<!-- Pool de Conexões. -->
 		<!-- necessário trocar o Pool xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 		<property name="connection.pool_size">1</property>
-		<property name="show_sql">true</property>
+		<property name="show_sql">false</property>
 		<!-- Gerenciamento do Contexto das Sessões -->
 		<property name="current_session_context_class">thread</property>
 		<!-- Cache de Segundo Nível -->

@@ -43,7 +43,6 @@ public class LerArquivoCSV {
 				for (int i = 1; i < linhas; i++) {
 					Cell celulaIDPainel = sheet.getCell(0, i); // coluna 0 - ID do Painel
 					Cell celulaCaptura = sheet.getCell(1, i); // coluna 1 - true ou false para captura
-					System.out.println(celulaIDPainel.getContents().toString()+","+celulaCaptura.getContents().toString());
 					//Verifico se o painel foi selecionado para capturar ou não
 					boolean captura = false;
 					if(celulaCaptura.getContents().toString().equals("true")){

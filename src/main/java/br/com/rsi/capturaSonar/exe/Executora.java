@@ -142,7 +142,6 @@ public class Executora {
 		} catch (IOException e) {
 			LOG.debug("Erro com ao carregar o arquivo dados.properties : " + e.getMessage());
 		}
-
 		return dadosDB;
 
 	}
@@ -178,11 +177,8 @@ public class Executora {
 					if (massaCapturaCompleta.get(i).getCaptura()) {
 						sigla = new AnaliseCodigoHK();
 						nomePainel = massaCapturaCompleta.get(i).getNomePainel();
+						log.append("___________________________________\n");
 						selecionaPainel(URL_SONAR + "/dashboard?id=" + nomePainel, driver);
-						inserirDescricao();
-						inserirDataCaptura();
-						salvarSiglaBancoDeDados();
-						System.out.println(sigla);
 					}
 
 				} catch (Exception e) {
@@ -206,19 +202,33 @@ public class Executora {
 	}
 
 	private static void selecionaPainel(String painel, WebDriver driver) {
-		LOG.debug("-> Iniciando captura em: " + painel);
-		log.append("Iniciando captura em: " + painel + "\n");
-		sigla.setUrl(painel);
-		driver.navigate().to(painel);
-		capturaCobertura(driver);
+		try {
+			LOG.debug("Iniciando captura em: " + painel);
+			log.append("Iniciando captura em: " + painel + "\n");
+			sigla.setUrl(painel);
+			driver.navigate().to(painel);
+			Thread.sleep(7000);
+			if (driver.getPageSource().toString()
+					.contains("Either it has never been analyzed successfully or it has been deleted.")) {
+				throw new Exception();
+			}
+			capturaCobertura(driver);
+		} catch (Exception e) {
+			LOG.debug("Erro ao acessar o painel: " + painel);
+			log.append("Erro ao acessar o painel: " + painel + "\n");
+		}
+
 	}
 
 	private static void capturaCobertura(WebDriver driver) {
-		By elementoExibeCobertura = new PageObjectClass().getLabelCobertura();
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(elementoExibeCobertura));
-		String cobertura = driver.findElement(elementoExibeCobertura).getText().trim().toString();
+		String cobertura = "0.0%";
+		if (driver.getPageSource().toString().contains("Cobertura")) {
+			By elementoExibeCobertura = new PageObjectClass().getLabelCobertura();
+			new WebDriverWait(driver, 5000).until(ExpectedConditions.presenceOfElementLocated(elementoExibeCobertura));
+			cobertura = driver.findElement(elementoExibeCobertura).getText().trim().toString();
+		}
 		sigla.setCobertura(cobertura);
-		LOG.debug("-> Cobertura Capturada");
+		LOG.debug("Cobertura Capturada");
 		log.append("Cobertura Capturada \n");
 		capturaNomePainel(driver);
 	}
@@ -227,7 +237,7 @@ public class Executora {
 		By nomePainel = new PageObjectClass().getLabelNomePainel();
 		String nomeProjeto = driver.findElement(nomePainel).getAttribute("title").toString();
 		sigla.setNomeProjeto(nomeProjeto);
-		LOG.debug("-> Nome do Painel Capturado");
+		LOG.debug("Nome do Painel Capturado");
 		log.append("Nome do Painel Capturado \n");
 		capturaQualityGate(driver);
 	}
@@ -236,7 +246,7 @@ public class Executora {
 		By qualityGate = new PageObjectClass().getLabelQualityGate();
 		String resultadoQualityGate = driver.findElement(qualityGate).getText().toString().trim();
 		sigla.setQualidade(resultadoQualityGate);
-		LOG.debug("-> Quality Gate Capturado");
+		LOG.debug("Quality Gate Capturado");
 		log.append("Quality Gate Capturado \n");
 		capturaDataAnalise(driver);
 	}
@@ -250,7 +260,7 @@ public class Executora {
 				Integer.parseInt(dataExecucaoAtual[0]), 0, 0, 0);
 		Date dataExecucaoFormatoDate = new Date(data.getTime().getTime());
 		sigla.setDataSonar(dataExecucaoFormatoDate);
-		LOG.debug("-> Data de Execução Capturada");
+		LOG.debug("Data de Execução Capturada");
 		log.append("Data de Execução Capturada \n");
 		capturaVersao(driver);
 	}
@@ -259,7 +269,7 @@ public class Executora {
 		String versao = driver.findElement(new PageObjectClass().getLabelVersao()).getText().toString().trim()
 				.split(" ")[1];
 		sigla.setVersao(versao);
-		LOG.debug("-> Versao Capturada");
+		LOG.debug("Versao Capturada");
 		log.append("Versao Capturada \n");
 		capturaIssues(driver);
 	}
@@ -269,13 +279,13 @@ public class Executora {
 		// Captura do bugs
 		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=BUG");
 		sigla.setBugs(verificaIssues(page.getQtdBugs(), driver));
-		LOG.debug("-> Bugs Capturados");
+		LOG.debug("Bugs Capturados");
 		log.append("Bugs Capturados \n");
 
 		// Captura dos code smells
 		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=CODE_SMELL");
 		sigla.setCodeSmall(verificaIssues(page.getQtdCodeSmell(), driver));
-		LOG.debug("-> CodeSmells Capturados");
+		LOG.debug("CodeSmells Capturados");
 		log.append("CodeSmells Capturados \n");
 
 		// Captura do total de vulnerabilidades
@@ -283,7 +293,7 @@ public class Executora {
 		sigla.setVulnerabilidades(verificaIssues(page.getQtdVulnerabilidade(), driver));
 		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=VULNERABILITY");
 		capturaVulnerabilidadesporGravidade(driver);
-		LOG.debug("-> Vulnerabilidades Capturadas");
+		LOG.debug("Vulnerabilidades Capturadas");
 		log.append("Vulnerabilidades Capturadas \n");
 
 		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false");
@@ -303,34 +313,44 @@ public class Executora {
 	}
 
 	private static void capturaIssuesPorGravidade(WebDriver driver) {
-		PageObjectClass page = new PageObjectClass();
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(page.getLabelBlocker()));
-		sigla.setIssuesMuitoAlta(validarQuantidadeIssues(page.getLabelBlocker(), driver));
-		sigla.setIssuesAlta(validarQuantidadeIssues(page.getLabelCritical(), driver));
-		sigla.setIssuesMedia(validarQuantidadeIssues(page.getLabelMajor(), driver));
-		sigla.setIssuesBaixa(validarQuantidadeIssues(page.getLabelMinor(), driver));
-		sigla.setIssuesMuitoBaixa(validarQuantidadeIssues(page.getLabelInfo(), driver));
-		LOG.debug("-> Issues Capturadas");
-		log.append("Issues Capturadas \n");
-		capturaDebitoTecnico(driver);
+		try {
+			PageObjectClass page = new PageObjectClass();
+			new WebDriverWait(driver, 10000).until(ExpectedConditions.presenceOfElementLocated(page.getLabelBlocker()));
+			sigla.setIssuesMuitoAlta(validarQuantidadeIssues(page.getLabelBlocker(), driver));
+			sigla.setIssuesAlta(validarQuantidadeIssues(page.getLabelCritical(), driver));
+			sigla.setIssuesMedia(validarQuantidadeIssues(page.getLabelMajor(), driver));
+			sigla.setIssuesBaixa(validarQuantidadeIssues(page.getLabelMinor(), driver));
+			sigla.setIssuesMuitoBaixa(validarQuantidadeIssues(page.getLabelInfo(), driver));
+			LOG.debug("Issues Capturadas");
+			log.append("Issues Capturadas \n");
+			capturarEsforcoConfiabilidade(driver);
+		} catch (Exception e) {
+			LOG.debug("Erro ao capturar issues");
+			log.append("Erro ao capturar issues\n");
+		}
+
 	}
 
 	private static int validarQuantidadeIssues(By labelIssue, WebDriver driver) {
 		PageObjectClass page = new PageObjectClass();
 		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false");
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(labelIssue));
+		new WebDriverWait(driver, 10000).until(ExpectedConditions.presenceOfElementLocated(labelIssue));
 		String valorElemento = driver.findElement(labelIssue).getText().toString();
 		int valorFinal = 0;
 		if (valorElemento.contains("k")) {
 			driver.findElement(labelIssue).click();
-			new WebDriverWait(driver, 2000)
+			new WebDriverWait(driver, 10000)
 					.until(ExpectedConditions.presenceOfElementLocated(page.getTotalProblemasComVirgula()));
 			String[] problemasSeparados = driver.findElement(page.getTotalProblemasComVirgula()).getText().toString()
 					.split("\\/");
-			valorFinal = Integer.parseInt(problemasSeparados[1].replace(',', ' ').replaceAll(" ", ""));
+			valorFinal = Integer.parseInt(problemasSeparados[1].replace('.', ' ').replaceAll(" ", ""));
 
 		} else {
-			valorFinal = Integer.parseInt(valorElemento);
+			if (valorElemento.contains("Informativo")) {
+				valorFinal = Integer.parseInt(valorElemento.substring(valorElemento.lastIndexOf('o') + 1).trim());
+			} else {
+				valorFinal = Integer.parseInt(valorElemento);
+			}
 		}
 		return valorFinal;
 	}
@@ -338,12 +358,12 @@ public class Executora {
 	private static int validarQuantidadeVulnerabilidades(By labelIssue, WebDriver driver) {
 		PageObjectClass page = new PageObjectClass();
 		driver.navigate().to(URL_SONAR + "/project/issues?id=" + nomePainel + "&resolved=false&types=VULNERABILITY");
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(labelIssue));
+		new WebDriverWait(driver, 10000).until(ExpectedConditions.presenceOfElementLocated(labelIssue));
 		String valorElemento = driver.findElement(labelIssue).getText().toString();
 		int valorFinal = 0;
 		if (valorElemento.contains("k")) {
 			driver.findElement(labelIssue).click();
-			new WebDriverWait(driver, 2000)
+			new WebDriverWait(driver, 10000)
 					.until(ExpectedConditions.presenceOfElementLocated(page.getTotalProblemasComVirgula()));
 			String[] problemasSeparados = driver.findElement(page.getTotalProblemasComVirgula()).getText().toString()
 					.split("\\/");
@@ -355,50 +375,75 @@ public class Executora {
 		return valorFinal;
 	}
 
-	private static void capturaDebitoTecnico(WebDriver driver) {
-		PageObjectClass page = new PageObjectClass();
-		driver.navigate().to(URL_SONAR + "/project/issues?facetMode=effort&id=" + nomePainel + "&resolved=false");
-		new WebDriverWait(driver, 2000)
-				.until(ExpectedConditions.presenceOfElementLocated(page.getModoExibicaoPorEsforco()));
-		driver.findElement(page.getOpcaoSolucao()).click();
-		new WebDriverWait(driver, 2000)
-				.until(ExpectedConditions.presenceOfElementLocated(page.getSolucaoNaoResolvido()));
-		sigla.setDebitoTecnico(driver.findElement(page.getSolucaoNaoResolvido()).getText().toString().trim());
-		capturarEsforcoConfiabilidade(driver);
-	}
+	// private static void capturaDebitoTecnico(WebDriver driver) {
+	// PageObjectClass page = new PageObjectClass();
+	// driver.navigate().to(URL_SONAR + "/component_measures?id=" + nomePainel);
+	// new WebDriverWait(driver, 10000)
+	// .until(ExpectedConditions.presenceOfElementLocated(page.getModoExibicaoPorEsforco()));
+	// driver.findElement(page.getModoExibicaoPorEsforco()).click();
+	// new WebDriverWait(driver, 10000)
+	// .until(ExpectedConditions.presenceOfElementLocated(page.getDebitoTecnico()));
+	// sigla.setDebitoTecnico(driver.findElement(page.getDebitoTecnico()).getText().toString().trim());
+	// capturarEsforcoConfiabilidade(driver);
+	// }
 
 	private static void capturarEsforcoConfiabilidade(WebDriver driver) {
-		PageObjectClass page = new PageObjectClass();
-		driver.navigate().to(URL_SONAR + "/component_measures?id=" + nomePainel);
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(page.getLinkConfiablidade()));
-		driver.findElement(page.getLinkConfiablidade()).click();
-		sigla.setEsforcoConfiabilidade(
-				driver.findElement(page.getRemediationEffortConfiabilidade()).getText().toString().trim());
+		try {
+			PageObjectClass page = new PageObjectClass();
+			driver.navigate().to(URL_SONAR + "/component_measures?id=" + nomePainel);
+			new WebDriverWait(driver, 10000)
+					.until(ExpectedConditions.presenceOfElementLocated(page.getLinkConfiablidade()));
+			driver.findElement(page.getLinkConfiablidade()).click();
+			sigla.setEsforcoConfiabilidade(
+					driver.findElement(page.getRemediationEffortConfiabilidade()).getText().toString().trim());
+			LOG.debug("Esforço de conformidade capturado com sucesso");
+			log.append("Esforço de conformidade capturado com sucesso\n");
+		} catch (Exception e) {
+			LOG.debug("Erro ao capturar o esforço de conformidade");
+			log.append("Erro ao capturar o esforço de conformidade\n");
+		}
 		capturarEsforcoSeguranca(driver);
 	}
 
 	private static void capturarEsforcoSeguranca(WebDriver driver) {
-		PageObjectClass page = new PageObjectClass();
-		driver.navigate().to(URL_SONAR + "/component_measures?id=" + nomePainel);
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(page.getLinkSeguranca()));
-		driver.findElement(page.getLinkSeguranca()).click();
-		sigla.setEsforcoSeguranca(driver.findElement(page.getRemediationEffortSeguranca()).getText().toString().trim());
+		try {
+			PageObjectClass page = new PageObjectClass();
+			driver.navigate().to(URL_SONAR + "/component_measures?id=" + nomePainel);
+			new WebDriverWait(driver, 10000)
+					.until(ExpectedConditions.presenceOfElementLocated(page.getLinkSeguranca()));
+			driver.findElement(page.getLinkSeguranca()).click();
+			sigla.setEsforcoSeguranca(
+					driver.findElement(page.getRemediationEffortSeguranca()).getText().toString().trim());
+			LOG.debug("Esforço de segurança capturado com sucesso");
+			log.append("Esforço de segurança capturado com sucesso\n");
+		} catch (Exception e) {
+			LOG.debug("Erro ao capturar o esforço de segurança");
+			log.append("Erro ao capturar o esforço de segurança\n");
+		}
 		capturarLinhasCodigo(driver);
 	}
 
 	private static void capturarLinhasCodigo(WebDriver driver) {
-		PageObjectClass page = new PageObjectClass();
-		driver.navigate().to(URL_SONAR + "/component_measures?id=" + nomePainel);
-		new WebDriverWait(driver, 2000).until(ExpectedConditions.presenceOfElementLocated(page.getLinkTamanho()));
-		driver.findElement(page.getLinkTamanho()).click();
-		sigla.setLinhaCodigo(validarLinhasCodigo(page.getQtdLinhasCodigo(), driver));
+		try {
+			PageObjectClass page = new PageObjectClass();
+			driver.navigate().to(URL_SONAR + "/component_measures?id=" + nomePainel);
+			new WebDriverWait(driver, 10000).until(ExpectedConditions.presenceOfElementLocated(page.getLinkTamanho()));
+			driver.findElement(page.getLinkTamanho()).click();
+			sigla.setLinhaCodigo(validarLinhasCodigo(page.getQtdLinhasCodigo(), driver));
+			LOG.debug("Linhas de código capturadas com sucesso");
+			log.append("Linhas de código capturadas com sucesso\n");
+		} catch (Exception e) {
+			LOG.debug("Erro ao capturar linhas de código");
+			log.append("Erro ao capturar linhas de código\n");
+		}
+		inserirDescricao();
 	}
 
 	private static int validarLinhasCodigo(By qtdLinhasCodigo, WebDriver driver) {
 		int linhas = 0;
 		String linhasCodigo = driver.findElement(qtdLinhasCodigo).getText().toString().trim();
-		if (linhasCodigo.contains(",")) {
-			linhas = Integer.parseInt(linhasCodigo.replace(',', ' ').replaceAll(" ", ""));
+		if (linhasCodigo.contains(".")) {
+			linhas = Integer.parseInt(linhasCodigo.replace('.', ' ').replaceAll(" ", ""));
 		} else {
 			linhas = Integer.parseInt(linhasCodigo);
 		}
@@ -414,7 +459,7 @@ public class Executora {
 		if (valorElemento.contains("k")) {
 			String[] problemasSeparados = driver.findElement(page.getTotalProblemasComVirgula()).getText().toString()
 					.split("\\/");
-			valorFinal += Integer.parseInt(problemasSeparados[1].replace(',', ' ').replaceAll(" ", ""));
+			valorFinal += Integer.parseInt(problemasSeparados[1].replace('.', ' ').replaceAll(" ", ""));
 
 		} else {
 			valorFinal = Integer.parseInt(valorElemento);
@@ -448,6 +493,8 @@ public class Executora {
 			sigla.setDescricao(arquivo.getProperty("prop.server.descricao"));
 			LOG.debug("Descricao inserida");
 			log.append("Descricao inserida\n");
+			inserirDataCaptura();
+
 		} catch (Exception e) {
 			LOG.debug("Erro ao inserir descricao");
 			log.append("Erro ao inserir descricao\n");
@@ -460,22 +507,36 @@ public class Executora {
 			sigla.setDataCaptura(dataAtual);
 			LOG.debug("Data de Captura inserida");
 			log.append("Data de Captura inserida\n");
+			relacionarProjetoSiglaGestor();
+
 		} catch (Exception e) {
 			LOG.debug("Erro ao inserir data de Captura");
 			log.append("Erro ao inserir data de Captura \n");
 		}
 	}
 
-	private static void salvarSiglaBancoDeDados() {
+	private static void relacionarProjetoSiglaGestor() {
 		try {
 			RelacaoProjetoSiglaGestorDAO relacaoDAO = new RelacaoProjetoSiglaGestorDAO();
 			RelacaoProjetoSiglaGestor relacao = relacaoDAO.buscarGestorESigla(sigla.getNomeProjeto());
 			sigla.setPainelGestor(relacao.getPainelGestor());
 			sigla.setSigla(relacao.getSigla());
+			LOG.debug("Relacionamento entre projeto e gestor criado com sucesso");
+			log.append("Relacionamento entre projeto e gestor criado com sucesso\n");
+			salvarSiglaBancoDeDados();
+		} catch (Exception e) {
+			LOG.debug("Erro ao criar relacionamento entre projeto e gestor");
+			log.append("Erro ao criar relacionamento entre projeto e gestor\n");
+		}
+	}
+
+	private static void salvarSiglaBancoDeDados() {
+		try {
 			AnaliseCodigoDAO siglaDAO = new AnaliseCodigoDAO();
 			siglaDAO.salvar(sigla);
 			LOG.debug("Captura inserida no banco");
 			log.append("Captura inserida no banco\n");
+			System.out.println(sigla);
 		} catch (Exception e) {
 			LOG.debug("Erro ao inserir captura no banco");
 			log.append("Erro ao inserir captura no banco \n");

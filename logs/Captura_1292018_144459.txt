@@ -1,0 +1,20 @@
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BDI-HK
+Cobertura Capturada 
+Nome do Painel Capturado 
+Quality Gate Capturado 
+Data de Execução Capturada 
+Versao Capturada 
+Bugs Capturados 
+CodeSmells Capturados 
+Vulnerabilidades Capturadas 
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BCL-HK
+Cobertura Capturada 
+Nome do Painel Capturado 
+Quality Gate Capturado 
+Data de Execução Capturada 
+Versao Capturada 
+Bugs Capturados 
+Erro ao acessar o painel: http://10.1.11.107:9000/dashboard?id=BCL-HK
+

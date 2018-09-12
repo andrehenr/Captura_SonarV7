@@ -1,0 +1,46 @@
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BDI-HK
+Cobertura Capturada 
+Nome do Painel Capturado 
+Quality Gate Capturado 
+Data de Execução Capturada 
+Versao Capturada 
+Bugs Capturados 
+CodeSmells Capturados 
+Vulnerabilidades Capturadas 
+Issues Capturadas 
+Descricao inserida
+Data de Captura inserida
+Relacionamento entre projeto e gestor criada com sucesso
+Captura inserida no banco
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BCL-HK
+Cobertura Capturada 
+Nome do Painel Capturado 
+Quality Gate Capturado 
+Data de Execução Capturada 
+Versao Capturada 
+Bugs Capturados 
+CodeSmells Capturados 
+Vulnerabilidades Capturadas 
+Issues Capturadas 
+Descricao inserida
+Data de Captura inserida
+Relacionamento entre projeto e gestor criada com sucesso
+Captura inserida no banco
+___________________________________
+Iniciando captura em: http://10.1.11.107:9000/dashboard?id=BTE-HK
+Cobertura Capturada 
+Nome do Painel Capturado 
+Quality Gate Capturado 
+Data de Execução Capturada 
+Versao Capturada 
+Bugs Capturados 
+CodeSmells Capturados 
+Vulnerabilidades Capturadas 
+Issues Capturadas 
+Descricao inserida
+Data de Captura inserida
+Relacionamento entre projeto e gestor criada com sucesso
+Captura inserida no banco
+
