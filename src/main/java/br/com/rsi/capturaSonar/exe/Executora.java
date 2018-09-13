@@ -23,7 +23,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import br.com.rsi.capturaSonar.dao.AnaliseCodigoDAO;
 import br.com.rsi.capturaSonar.dao.RelacaoProjetoSiglaGestorDAO;
-import br.com.rsi.capturaSonar.domain.AnaliseCodigoHK;
+import br.com.rsi.capturaSonar.domain.AnaliseCodigo;
 import br.com.rsi.capturaSonar.domain.RelacaoProjetoSiglaGestor;
 import br.com.rsi.capturaSonar.pages.PageObjectClass;
 import br.com.rsi.capturaSonar.util.LerArquivoCSV;
@@ -72,7 +72,7 @@ public class Executora {
 
 	private static Logger LOG = Logger.getLogger(Executora.class);
 
-	private static AnaliseCodigoHK sigla; // Objeto utilizado para a
+	private static AnaliseCodigo sigla; // Objeto utilizado para a
 											// persistencia
 											// de cada
 	// painel
@@ -175,7 +175,7 @@ public class Executora {
 			while (i < massaCapturaCompleta.size()) {
 				try {
 					if (massaCapturaCompleta.get(i).getCaptura()) {
-						sigla = new AnaliseCodigoHK();
+						sigla = new AnaliseCodigo();
 						nomePainel = massaCapturaCompleta.get(i).getNomePainel();
 						log.append("___________________________________\n");
 						selecionaPainel(URL_SONAR + "/dashboard?id=" + nomePainel, driver);

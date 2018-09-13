@@ -1,7 +1,7 @@
 package br.com.rsi.capturaSonar.dao;
 
-import br.com.rsi.capturaSonar.domain.AnaliseCodigoHK;
+import br.com.rsi.capturaSonar.domain.AnaliseCodigo;
 
-public class AnaliseCodigoDAO extends GenericDAO<AnaliseCodigoHK> {
+public class AnaliseCodigoDAO extends GenericDAO<AnaliseCodigo> {
 
 }
